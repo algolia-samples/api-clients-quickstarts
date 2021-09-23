@@ -1,0 +1,2 @@
+algoliasearch>=2.0,<3.0
+python-dotenv==0.17.1

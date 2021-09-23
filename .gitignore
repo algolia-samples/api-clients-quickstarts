@@ -1,0 +1,10 @@
+.env
+
+# PHP
+vendor/
+.composer.lock
+
+# Python
+env/
+
+# Go
