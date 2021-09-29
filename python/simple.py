@@ -1,6 +1,9 @@
 from os import getenv
 
 from algoliasearch.search_client import SearchClient
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 # Algolia client credentials
 ALGOLIA_APP_ID = getenv('ALGOLIA_APP_ID')
