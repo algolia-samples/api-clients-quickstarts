@@ -9,8 +9,9 @@
   ],
   "prefer-stable": true,
   "require": {
-      "php": "^7.2 || ^8.0",
-      "algolia/algoliasearch-client-php": "^3.0"
+    "php": "^7.2 || ^8.0",
+    "algolia/algoliasearch-client-php": "^3.0",
+    "vlucas/phpdotenv": "^5.3"
   },
   "config": {
       "sort-packages": true
