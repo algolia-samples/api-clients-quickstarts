@@ -27,6 +27,22 @@
       "localEnvironment": "PHP >= 7.2, [Composer](https://getcomposer.org/doc/00-intro.md)",
       "dependencies": "php composer.phar install",
       "command": "php simle.php"
+    },
+    {
+      "name": ".NET",
+      "code": "cs",
+      "localEnvironment": ".NET Standard 1.3-2.1 or .NET Core 1.0-3.0 or .NET Framework 4.5-4.7.1",
+      "dependencies": "...",
+      "command": "dotnet run simple",
+      "readmeDirectory": "dotnet"
+    },
+    {
+      "name": "JavaScript",
+      "code": "js",
+      "localEnvironment": "Node.js",
+      "dependencies": "npm install",
+      "command": "node simple.js",
+      "readmeDirectory": "js"
     }
   ]
 }

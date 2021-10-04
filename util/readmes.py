@@ -17,10 +17,12 @@ To add a new language:
 """
 
 import json
+import logging
 from argparse import ArgumentParser, Namespace
-from pathlib import Path
 from string import Template
 from typing import Dict
+
+log = logging.getLogger(__name__)
 
 
 def cli() -> Namespace:
@@ -85,6 +87,14 @@ if __name__ == "__main__":
         readme = render(template, data)
 
         # write files to disk
-        out_file_path = Path("..") / lang["name"].lower() / "README.md"
-        with open(out_file_path, "w") as out_f:
-            out_f.write(readme)
+        readme_dir = lang.get("readmeDirectory") or lang["name"].lower()
+
+        try:
+            with open(f"../{readme_dir}/README.md", "w") as out_f:
+                out_f.write(readme)
+        except FileNotFoundError:
+            print(
+                f"No such directory: `{readme_dir}`. Ignoring. "
+                f"Check, if your file `{args.languages.name}` is up-to-date."
+            )
+            continue
