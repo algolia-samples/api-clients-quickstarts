@@ -8,3 +8,6 @@ vendor/
 env/
 
 # Go
+
+# Ruby
+debug.log

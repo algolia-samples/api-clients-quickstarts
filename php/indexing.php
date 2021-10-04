@@ -38,7 +38,7 @@ print_r($res['hits']);
 print("\n");
 
 # Save Objects: Add mutliple new objects to an index.
-# https://www.algolia.com/doc/api-reference/api-methods/add-objects/?client=python
+# https://www.algolia.com/doc/api-reference/api-methods/add-objects/?client=php
 print('Save Objects - Adding multiple objects: ');
 print_r($contacts);
 $index->saveObjects($contacts)->wait();
@@ -49,7 +49,7 @@ print_r($res['hits']);
 print("\n");
 
 # Save Objects: Replace an existing object with an updated set of attributes.
-# https://www.algolia.com/doc/api-reference/api-methods/save-objects/?client=python
+# https://www.algolia.com/doc/api-reference/api-methods/save-objects/?client=php
 print('Save Objects - Replacing objects’s attributes on: ');
 print_r($contacts[0]);
 $new_contact = [
@@ -64,7 +64,7 @@ print_r($res['hits']);
 print("\n");
 
 # Partial Update Objects: Update one or more attributes of an existing object.
-# https://www.algolia.com/doc/api-reference/api-methods/partial-update-objects/?client=python
+# https://www.algolia.com/doc/api-reference/api-methods/partial-update-objects/?client=php
 print('Save Objects - Updating object’s attributes on: ');
 print_r($contacts[0]);
 $new_contact = [
@@ -79,7 +79,7 @@ print_r($res['hits']);
 print("\n");
 
 # Delete Objects: Remove objects from an index using their objectID.
-# https://www.algolia.com/doc/api-reference/api-methods/delete-objects/?client=python
+# https://www.algolia.com/doc/api-reference/api-methods/delete-objects/?client=php
 $objectID_to_delete = $contacts[0]["objectID"];
 printf('Delete Objects - Deleting object with objectID "%s"', $objectID_to_delete);
 $index->deleteObject($objectID_to_delete)->wait();
@@ -90,7 +90,7 @@ print_r($res['hits']);
 print("\n");
 
 # Replace All Objects: Clears all objects from your index and replaces them with a new set of objects.
-# https://www.algolia.com/doc/api-reference/api-methods/replace-all-objects/?client=python
+# https://www.algolia.com/doc/api-reference/api-methods/replace-all-objects/?client=php
 $new_contacts = [
     [
         'name' => 'NewFoo',
@@ -111,11 +111,11 @@ print_r($res['hits']);
 print("\n");
 
 # Delete By: Remove all objects matching a filter (including geo filters).
-# https://www.algolia.com/doc/api-reference/api-methods/delete-by/?client=python
+# https://www.algolia.com/doc/api-reference/api-methods/delete-by/?client=php
 print_r('Delete By - Remove all objects matching "name:NewBar"');
 
 # Firstly, have an attribute to filter on
-# https://www.algolia.com/doc/api-client/methods/settings/?client=python
+# https://www.algolia.com/doc/api-client/methods/settings/?client=php
 $index->setSettings([
     'attributesForFaceting' => ['name']
 ])->wait();
@@ -130,7 +130,7 @@ print_r($res['hits']);
 print("\n");
 
 # Get Objects: Get one or more objects using their objectIDs.
-# https://www.algolia.com/doc/api-reference/api-methods/get-objects/?client=python
+# https://www.algolia.com/doc/api-reference/api-methods/get-objects/?client=php
 $object_id = $new_contacts[0]['objectID'];
 printf('Get Objects - Getting object with objectID "%s"', $object_id);
 
@@ -140,7 +140,7 @@ print_r($res);
 print("\n");
 
 # Custom Batch: Perform several indexing operations in one API call.
-# https://www.algolia.com/doc/api-reference/api-methods/batch/?client=python
+# https://www.algolia.com/doc/api-reference/api-methods/batch/?client=php
 $operations = [
     [
         'action' => 'addObject',
@@ -169,7 +169,7 @@ print("\n");
 
 
 # Clear Objects: Clear the records of an index without affecting its settings.
-# https://www.algolia.com/doc/api-reference/api-methods/clear-objects/?client=python
+# https://www.algolia.com/doc/api-reference/api-methods/clear-objects/?client=php
 print_r("Clear Objects: Clear the records of an index without affecting its settings.\n");
 $index->clearObjects()->wait();
 
