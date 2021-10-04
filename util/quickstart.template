@@ -1,0 +1,48 @@
+# Get started with the Algolia API client in: $language
+
+This quickstart demonstrates various use cases of the [Algolia $language API Client](https://www.algolia.com/doc/api-client/getting-started/install/$languageLowerCase/?client=$languageLowerCase).
+
+## Set up the quickstart
+
+You can either set up a local environment, or use Docker.
+If you're using Docker, consider using Visual Studio Code with the
+[Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+extension, which allows you to run the quickstarts from VSCode _inside_ docker
+containers.
+
+### Prerequisites
+
+- An Algolia account. If you don't have one, [create an account for free](https://www.algolia.com/users/sign_up)
+- A local environment: $localEnvironment or [Docker](https://www.docker.com/get-started)
+- If you're using a local environment and not Docker, you need to install the dependencies manually: `$dependencies`.
+
+<details>
+  <summary>Using Visual Studio Code</summary>
+
+VScode with the [Remote - Containers](https://code.visualstudio.com/docs/remote/containers) extension allows you to run any quickstart by using the command [**Remote-Containers: Open Folder in Container**](https://code.visualstudio.com/docs/remote/containers#_quick-start-open-an-existing-folder-in-a-container) command.
+Every quickstart contains a [`.devcontainer.json`](./.devcontainer/devcontainer.json) and a [`Dockerfile`](./.devcontainer/Dockerfile).
+
+</details>
+
+### Set up Algolia
+
+1. [Create an Algolia application](https://www.algolia.com/account/plan/create?from=dashboard) and an [Algolia index](https://www.algolia.com/doc/guides/getting-started/quick-start/tutorials/getting-started-with-the-dashboard/#indices)
+2. Copy the file [`.env.example`](.env.example) and rename it to `.env`
+3. Set the environment variables `ALGOLIA_APP_ID`, `ALGOLIA_API_KEY` and `ALGOLIA_INDEX_NAME` in the `.env` file. You can obtain those from the [Algolia Dashboard](https://www.algolia.com/api-keys/). The `ALGOLIA_API_KEY` should be the "Admin API Key", which is necessary for indexing.
+
+## How to use
+
+You can run each script in this folder using the $language command line.
+
+**Example**: to run the `simple.$code` sample:
+
+```bash
+$command
+```
+
+## Available quickstarts
+
+| File                               | Description                                  |
+| ---------------------------------- | -------------------------------------------- |
+| [simple.$code](./simple.$code)     | Index a single object and run a search query |
+| [indexing.$code](./indexing.$code) | Showcase the main indexing methods           |

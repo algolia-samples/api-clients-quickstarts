@@ -1,0 +1,32 @@
+{
+  "languages": [
+    {
+      "name": "Python",
+      "code": "py",
+      "localEnvironment": "Python >= 3.7",
+      "dependencies": "pip install -r requirements.txt",
+      "command": "python simple.py"
+    },
+    {
+      "name": "Ruby",
+      "code": "rb",
+      "localEnvironment": "Ruby >= 2.6, bundler",
+      "dependencies": "bundle install",
+      "command": "ruby simple.rb"
+    },
+    {
+      "name": "Go",
+      "code": "go",
+      "localEnvironment": "Go >= 1.8",
+      "dependencies": "go get github.com/algolia/algoliasearch-client-go/v3@v3.Y.Z",
+      "command": "go run simple.go"
+    },
+    {
+      "name": "PHP",
+      "code": "php",
+      "localEnvironment": "PHP >= 7.2, [Composer](https://getcomposer.org/doc/00-intro.md)",
+      "dependencies": "php composer.phar install",
+      "command": "php simle.php"
+    }
+  ]
+}
