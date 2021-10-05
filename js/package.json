@@ -1,0 +1,10 @@
+{
+  "name": "quickstarts",
+  "version": "0.0.1",
+  "author": "Algolia Samples",
+  "license": "MIT",
+  "devDependencies": {
+    "algoliasearch": "^4.10.5",
+    "dotenv": "^10.0.0"
+  }
+}
