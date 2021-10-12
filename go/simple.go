@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/algolia/algoliasearch-client-go/v3/algolia/search"
+	"github.com/joho/godotenv"
 )
 
 type Contact struct {
