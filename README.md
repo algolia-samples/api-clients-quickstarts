@@ -20,7 +20,7 @@ This quickstart sample demonstrates usages of the [Algolia Go SDK](https://www.a
 
 This quickstart sample demonstrates usages of the [Algolia PHP SDK](https://www.algolia.com/doc/api-client/getting-started/install/php/?client=php).
 
-### [Javascript](/js)
+### [JavaScript](/js)
 
 This quickstart sample demonstrates usages of the [Algolia Javascript SDK](https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript).
 
