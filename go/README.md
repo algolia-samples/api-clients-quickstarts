@@ -7,7 +7,7 @@ This quickstart demonstrates various usages of the the [Algolia Go API Client](h
 ### Prerequisites
 
 - An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign-up).
-- A Python >= 3.7 local environment, or [Docker](https://www.docker.com/get-started).
+- A Go >= 1.11 local environment, or [Docker](https://www.docker.com/get-started).
 
 <details>
   <summary>Using VSCode</summary>
