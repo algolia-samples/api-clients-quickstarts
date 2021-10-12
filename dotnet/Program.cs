@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using McMaster.Extensions.CommandLineUtils;
+// Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/csharp/?client=csharp
 using Algolia.Search.Clients;
 using Algolia.Search.Models.Search;
 using Algolia.Search.Models.Settings;
@@ -12,6 +13,10 @@ using dotenv.net;
 namespace DotNetQuickStart
 {
     class Program {
+
+        // Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
+        // and choose a name for your index. Add these environment variables to a `.env` file:
+        // ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME
         private static string _appId;
         private static string _apiKey;
         private static string _indexName;
@@ -38,25 +43,25 @@ namespace DotNetQuickStart
             {
                 configCmd.OnExecute(() =>
                 {
-                    // Initialize the client
+                    // Start the API client
                     // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
                     SearchClient client = new SearchClient(_appId, _apiKey);
 
-                    // Initialize an index
+                    // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
                     // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
                     SearchIndex index = client.InitIndex(_indexName);
 
-                    // Save Objects: Add mutliple new objects to an index.
+                    // Add new objects to the index
                     // https://www.algolia.com/doc/api-reference/api-methods/add-objects/
                     List<Contact> objs = new List<Contact>();
                     objs.Add(new Contact{ObjectID = "1", Name = "Foo"});
                     var res = index.SaveObjects(objs);
 
-                    // Waiting for the indexing task to complete
+                    // Wait for the indexing task to complete
                     // https://www.algolia.com/doc/api-reference/api-methods/wait-task/
                     res.Wait();
 
-                    // Search Index: Method used for querying an index.
+                    // Search the index for "Fo"
                     // https://www.algolia.com/doc/api-reference/api-methods/search/
                     var search = index.Search<Contact>(new Query("Fo"));
                     Console.WriteLine(search.Hits.ElementAt(0).ToString());
