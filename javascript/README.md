@@ -6,7 +6,7 @@ This quickstart demonstrates various usages of the [Algolia JavaScript API Clien
 
 ### Prerequisites
 
-- An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign-up).
+- An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign_up).
 - A Node local environment, or [Docker](https://www.docker.com/get-started).
 
 <details>
@@ -20,6 +20,11 @@ Each of the quickstart contains a [.devcontainer.json](./.devcontainer/devcontai
 
 1. Create an Algolia Application and an [Algolia Index](https://www.algolia.com/doc/guides/getting-started/quick-start/tutorials/getting-started-with-the-dashboard/#indices)
 2. Copy the file [.env.example](.env.example) and rename it to `.env`
+
+```bash
+cp .env.example .env
+```
+
 3. Set the environment variables `ALGOLIA_APP_ID`, `ALGOLIA_API_KEY` and `ALGOLIA_INDEX_NAME` in the `.env` file. You can obtain those from the [Algolia Dashboard](https://www.algolia.com/api-keys/). The `ALGOLIA_API_KEY` should be the "Admin API Key" (necessary for indexing).
 
 ## How to use
