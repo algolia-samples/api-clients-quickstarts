@@ -6,7 +6,7 @@ This quickstart demonstrates various usages of the the [Algolia Go API Client](h
 
 ### Prerequisites
 
-- An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign-up).
+- An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign_up).
 - A Go >= 1.11 local environment, or [Docker](https://www.docker.com/get-started).
 
 <details>

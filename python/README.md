@@ -6,7 +6,7 @@ This quickstart demonstrates various usages of the the [Algolia Python API Clien
 
 ### Prerequisites
 
-- An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign-up).
+- An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign_up).
 - A Python >= 3.7 local environment, or [Docker](https://www.docker.com/get-started).
 
 <details>

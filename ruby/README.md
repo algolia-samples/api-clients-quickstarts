@@ -6,7 +6,7 @@ This quickstart demonstrates various usages of the the [Algolia Ruby API Client]
 
 ### Prerequisites
 
-- An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign-up).
+- An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign_up).
 - A Ruby ^2.2 local environment, or [Docker](https://www.docker.com/get-started).
 
 <details>
