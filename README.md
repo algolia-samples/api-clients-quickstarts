@@ -26,5 +26,8 @@ This quickstart sample demonstrates usages of the [Algolia Javascript SDK](https
 
 ### [.NET](/dotnet)
 
-
 This quickstart sample demonstrates usages of the [Algolia .NET SDK](https://www.algolia.com/doc/api-client/getting-started/install/csharp/?client=csharp).
+
+### [JAVA](/java)
+
+This quickstart sample demonstrates usages of the [Algolia Java SDK](https://www.algolia.com/doc/api-client/getting-started/install/java/?client=java).

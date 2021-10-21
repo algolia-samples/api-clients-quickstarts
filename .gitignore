@@ -14,3 +14,9 @@ debug.log
 
 # Javascript
 node_modules/
+
+# Java
+target/
+.classpath
+.project
+.settings/
