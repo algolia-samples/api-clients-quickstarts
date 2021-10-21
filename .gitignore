@@ -11,3 +11,6 @@ env/
 
 # Ruby
 debug.log
+
+# Javascript
+node_modules/
