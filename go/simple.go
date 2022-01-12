@@ -4,9 +4,9 @@ package main
 import (
 	"fmt"
 	"os"
-
 	"github.com/algolia/algoliasearch-client-go/v3/algolia/search"
 	"github.com/joho/godotenv"
+	"log"
 )
 
 type Contact struct {
@@ -15,6 +15,10 @@ type Contact struct {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
   // Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
   // and choose a name for your index. Add these environment variables to a `.env` file:
 	appID, apiKey, indexName := os.Getenv("ALGOLIA_APP_ID"), os.Getenv("ALGOLIA_API_KEY"), os.Getenv("ALGOLIA_INDEX_NAME")
