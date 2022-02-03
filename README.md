@@ -34,4 +34,4 @@ This quickstart sample demonstrates usages of the [Algolia Java SDK](https://www
 
 ### [RUBY](/ruby)
 
-This quickstart sample demonstrates usages of the [Algolia Ruby SDK](https://www.algolia.com/doc/api-client/getting-started/install/ruby/?client=java).
+This quickstart sample demonstrates usages of the [Algolia Ruby SDK](https://www.algolia.com/doc/api-client/getting-started/install/ruby/?client=ruby).
