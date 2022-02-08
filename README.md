@@ -31,3 +31,7 @@ This quickstart sample demonstrates usages of the [Algolia .NET SDK](https://www
 ### [JAVA](/java)
 
 This quickstart sample demonstrates usages of the [Algolia Java SDK](https://www.algolia.com/doc/api-client/getting-started/install/java/?client=java).
+
+### [RUBY](/ruby)
+
+This quickstart sample demonstrates usages of the [Algolia Ruby SDK](https://www.algolia.com/doc/api-client/getting-started/install/ruby/?client=ruby).
