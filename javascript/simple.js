@@ -27,8 +27,11 @@ index
   // Wait for the indexing task to complete
   // https://www.algolia.com/doc/api-reference/api-methods/wait-task/
   .wait()
-  .then((response) => console.log(response));
+  .then((response) => {
+    console.log(response);
+    // Search the index for "Fo"
+    // https://www.algolia.com/doc/api-reference/api-methods/search/
+    index.search("Fo").then((objects) => console.log(objects)).catch();
+  }) ;
 
-// Search the index for "Fo"
-// https://www.algolia.com/doc/api-reference/api-methods/search/
-index.search("Fo").then((objects) => console.log(objects));
+
