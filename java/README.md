@@ -30,9 +30,6 @@ Once setup, you can run each of the script in this folder using your favorite Ja
 
 
 | File                         | Description                                  |
-
 | ---------------------------- | -------------------------------------------- |
-
 | [Simple.java](./src/main/java/Simple.java)     | Index a single object and run a search query |
-
 | [Indexing.java](./src/main/java/Indexing.java) | Showcase of the main indexing methods        |
