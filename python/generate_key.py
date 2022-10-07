@@ -1,4 +1,5 @@
-"""API Key Generator
+"""
+API Key Generator
 
 This script will generate an API key for an Algolia application.
 
@@ -11,6 +12,7 @@ from os import getenv
 # Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/python/?client=python
 from algoliasearch.search_client import SearchClient
 from dotenv import find_dotenv, load_dotenv
+import json
 
 load_dotenv(find_dotenv())
 
@@ -24,9 +26,8 @@ ALGOLIA_INDEX_NAME = getenv('ALGOLIA_INDEX_NAME')
 # https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
 client = SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 
-# Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-index = client.init_index(ALGOLIA_INDEX_NAME)
+# Create the key
+#https://www.algolia.com/doc/api-reference/api-methods/add-api-key/?client=python
 
 # Set the permissions for the key
 acl = ['search']
@@ -38,6 +39,27 @@ params = {
     'maxQueriesPerIPPerHour': 100
 }
 
-# Create the key
-res = client.add_api_key(acl, params)
-print(res)
+# Make the API request to add the key
+try:
+    res = client.add_api_key(acl, params)
+    key = res['key']
+except Exception as e:
+    print(f'Error: {e}')
+    exit()
+
+# Initialise a new client with the generated key
+client = SearchClient.create(ALGOLIA_APP_ID, key)
+
+# Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
+# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
+index = client.init_index(ALGOLIA_INDEX_NAME)
+
+# Test the created key
+try:
+    res = index.search('')
+    if res:
+        print(f'Key generated successfully: {key}')
+except Exception as e:
+    print(f'Error: {e}')
+    exit()
+
