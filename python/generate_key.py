@@ -7,12 +7,13 @@ The generated key will be valid for Search operations, and will be limited to 10
 
 """
 
+from pickle import FALSE
+import time
 from os import getenv
 
 # Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/python/?client=python
 from algoliasearch.search_client import SearchClient
 from dotenv import find_dotenv, load_dotenv
-import json
 
 load_dotenv(find_dotenv())
 
@@ -40,12 +41,37 @@ params = {
 }
 
 # Make the API request to add the key
+print('Generating key...')
 try:
     res = client.add_api_key(acl, params)
     key = res['key']
+    print(f'Key generated successfully: {key}.')
 except Exception as e:
-    print(f'Error: {e}')
+    print(f'Error generating key: {e}')
     exit()
+
+# Make sure the key is synced with the application before testing it
+print('Checking key has synced...')
+
+KEY_SYNCED = False
+
+while not KEY_SYNCED:
+    # Retrieve all of the current keys
+    try:
+        app_keys = client.list_api_keys()
+        # Check the keys to see whether the newly generated key is amongst them.
+        if next((item for item in app_keys['keys'] if item['value'] == key), False):
+            print('Key synced.')
+            KEY_SYNCED = True
+        else:
+            print('Key not synced...')
+            time.sleep(1)
+    except Exception as e:
+        print(f'Error retrieving current keys: {e}')
+        exit()
+
+# Test the created key
+print('Testing key...')
 
 # Initialise a new client with the generated key
 client = SearchClient.create(ALGOLIA_APP_ID, key)
@@ -54,12 +80,11 @@ client = SearchClient.create(ALGOLIA_APP_ID, key)
 # https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
 index = client.init_index(ALGOLIA_INDEX_NAME)
 
-# Test the created key
-try:
+try:  
     res = index.search('')
     if res:
-        print(f'Key generated successfully: {key}')
+        print('Key tested successfully')
 except Exception as e:
-    print(f'Error: {e}')
+    print(f'Error testing key: {e}')
     exit()
 
