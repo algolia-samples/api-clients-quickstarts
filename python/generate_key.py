@@ -43,32 +43,12 @@ params = {
 # Make the API request to add the key
 print('Generating key...')
 try:
-    res = client.add_api_key(acl, params)
+    res = client.add_api_key(acl, params).wait()
     key = res['key']
     print(f'Key generated successfully: {key}.')
 except Exception as e:
     print(f'Error generating key: {e}')
     exit()
-
-# Make sure the key is synced with the application before testing it
-print('Checking key has synced...')
-
-KEY_SYNCED = False
-
-while not KEY_SYNCED:
-    # Retrieve all of the current keys
-    try:
-        app_keys = client.list_api_keys()
-        # Check the keys to see whether the newly generated key is amongst them.
-        if next((item for item in app_keys['keys'] if item['value'] == key), False):
-            print('Key synced.')
-            KEY_SYNCED = True
-        else:
-            print('Key not synced...')
-            time.sleep(1)
-    except Exception as e:
-        print(f'Error retrieving current keys: {e}')
-        exit()
 
 # Test the created key
 print('Testing key...')
