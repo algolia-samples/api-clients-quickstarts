@@ -7,8 +7,6 @@ The generated key will be valid for Search operations, and will be limited to 10
 
 """
 
-from pickle import FALSE
-import time
 from os import getenv
 
 # Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/python/?client=python
