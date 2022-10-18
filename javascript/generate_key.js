@@ -18,11 +18,11 @@ const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
 
 // Start the API client
 // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-let client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
+const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 
 // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
 // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-let index = client.initIndex(ALGOLIA_INDEX_NAME);
+const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
 // Set permissions for API key
 // https://www.algolia.com/doc/api-reference/api-methods/add-api-key/#method-param-acl
@@ -46,18 +46,18 @@ client
   .then((response) => {
     const NEW_API_KEY = response["key"];
     console.log(`Key generated successfully: ${NEW_API_KEY}`);
-
+    console.log(`---------`)
     console.log("Testing the key...");
 
     // Start the API client
-    client = algoliasearch(ALGOLIA_APP_ID, NEW_API_KEY);
+    const client = algoliasearch(ALGOLIA_APP_ID, NEW_API_KEY);
 
     // # Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-    index = client.initIndex(ALGOLIA_INDEX_NAME);
+    const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
     // # Implement an empty search query
-    const res = index.search("");
-
-    // # Check that the search works
-    !res ? console.log(`Error generating key`) : console.log(`New key connected to App successfully`);
+    const res = index.search("").then((response) => {
+      console.log(response.hits);
+      res ? console.log(`New key connected to App successfully`) : console.log(`Error generating key`);
+    });
   });
