@@ -59,5 +59,5 @@ client
     const res = index.search("");
 
     // # Check that the search works
-    !res ? console.log("Error generating key") : console.log(`New key connected to App successfully`);
+    !res ? console.log(`Error generating key`) : console.log(`New key connected to App successfully`);
   });
