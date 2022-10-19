@@ -57,7 +57,8 @@ client
 
     // # Implement an empty search query
     const res = index.search("").then((response) => {
-      console.log(response.hits);
-      res ? console.log(`New key connected to App successfully`) : console.log(`Error generating key`);
+    // # Testing key and printing first item in index
+      console.log(response.hits[0]);
+      res ? console.log(`New key connected to index successfully`) : console.log(`Error connecting new key to index`);
     });
   });
