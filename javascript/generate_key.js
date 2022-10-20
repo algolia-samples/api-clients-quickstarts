@@ -46,7 +46,7 @@ client
   .then((response) => {
     const NEW_API_KEY = response["key"];
     console.log(`Key generated successfully: ${NEW_API_KEY}`);
-    console.log(`---------`)
+    console.log(`---------`);
     console.log("Testing the key...");
 
     // Start the API client
@@ -56,9 +56,11 @@ client
     const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
     // # Implement an empty search query
-    const res = index.search("").then((response) => {
-    // # Testing key and printing first item in index
-      console.log(response.hits[0]);
-      res ? console.log(`New key connected to index successfully`) : console.log(`Error connecting new key to index`);
+    index.search("").then((response) => {
+      // # Printing first item in index
+      // console.log(response.hits[0]);
+
+      // # Checking connection of new API key to index
+      !Object.keys(response).length ? console.log(`Error connecting new key to index`) : console.log(`New key connected to index successfully`);
     });
   });
