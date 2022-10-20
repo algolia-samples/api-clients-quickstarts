@@ -57,10 +57,7 @@ client
 
     // # Implement an empty search query
     index.search("").then((response) => {
-      // # Printing first item in index
-      // console.log(response.hits[0]);
-
       // # Checking connection of new API key to index
       !Object.keys(response).length ? console.log(`Error connecting new key to index`) : console.log(`New key connected to index successfully`);
-    });
+    }).catch(error => console.log(error));
   });
