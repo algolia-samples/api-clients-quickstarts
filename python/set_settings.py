@@ -11,21 +11,21 @@ ALGOLIA_APP_ID = os.getenv('ALGOLIA_APP_ID')
 ALGOLIA_API_KEY = os.getenv('ALGOLIA_API_KEY')
 ALGOLIA_INDEX_NAME = os.getenv('ALGOLIA_INDEX_NAME')
 
-# Initialize the Algolia Client
+# Initialize the client
+# https://www.algolia.com/doc/api-client/getting-started/initialize/python/?client=python
 client = SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 
-# Initialize an index
+# Initialize the index
+# https://www.algolia.com/doc/api-client/getting-started/initialize/python/?client=python
 index = client.init_index(ALGOLIA_INDEX_NAME)
 
-# Example of a record structure 
-# record = {
-  # "objectID": 1,
-  # "name": "John Doe",
-  # "address": "London",
-  # "followers": 5
-  # }
-
 # Set your index settings 
+# attributesForFaceting
+# https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/
+# filterOnly : the attribute will be filterable only and not facetable.
+# searchable : the attribute will be be searchable.
+# customRanking : You can decide whether the order should be descending or ascending.
+# https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/
 index.set_settings({
   "searchableAttributes": ["name", "address"],
   'attributesForFaceting': ["name", "filterOnly(address)","searchable(followers)"],
