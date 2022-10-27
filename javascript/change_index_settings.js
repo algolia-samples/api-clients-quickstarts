@@ -37,7 +37,6 @@ index
   // Display both changed settings
     index.getSettings().then((settings) => {
       console.log(settings["searchableAttributes"], settings["customRanking"]);
-    //   console.log(settings["customRanking"]);
     });
   })
   .catch((error) => console.log(error));
