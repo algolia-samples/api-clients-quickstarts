@@ -1,6 +1,6 @@
 # API Clients Quickstarts: Go
 
-This quickstart demonstrates various usages of the the [Algolia Go API Client](https://www.algolia.com/doc/api-client/getting-started/install/python/?client=go).
+This quickstart demonstrates various usages of the the [Algolia Go API Client](https://www.algolia.com/doc/api-client/getting-started/install/go/?client=go).
 
 ## Setting up the quickstart
 
