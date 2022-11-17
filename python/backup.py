@@ -8,6 +8,7 @@ It can be used in conjunction with restore.py to backup and restore an index to 
 """
 
 import json
+import os.path
 from os import getenv
 
 # Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/python/?client=python
@@ -21,6 +22,9 @@ load_dotenv(find_dotenv())
 ALGOLIA_APP_ID = getenv('ALGOLIA_APP_ID')
 ALGOLIA_API_KEY = getenv('ALGOLIA_API_KEY')
 ALGOLIA_INDEX_NAME = getenv('ALGOLIA_INDEX_NAME')
+
+# Set the path for the current file, we'll need this when generating the exports
+current_path = os.path.dirname(os.path.abspath(__file__))
 
 # Start the API client
 # https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
@@ -59,25 +63,25 @@ except Exception as e:
     exit()
 
 # Create a function to help with writing the output data
-def create_json(data, name):
+def create_json(data, name, path):
     '''
     Converts a list to a json file
     '''
     if data:
         json_data = json.dumps(data)
-        with open(f'{ALGOLIA_INDEX_NAME}_{name}.json', 'w', encoding='utf-16') as file:
+        with open(f'{path}/{ALGOLIA_INDEX_NAME}_{name}.json', 'w', encoding='utf-16') as file:
             file.write(json_data)
 
 # Write the exported data to output files
 print('Exporting data...')
 try:
-    create_json(records, 'index')
+    create_json(records, 'index', current_path)
     print('Exported index.')
-    create_json(settings, 'settings')
+    create_json(settings, 'settings', current_path)
     print('Exported settings.')
-    create_json(rules, 'rules')
+    create_json(rules, 'rules', current_path)
     print('Exported rules.')
-    create_json(synonyms, 'synonyms')
+    create_json(synonyms, 'synonyms', current_path)
     print('Exported synonyms.')
     print('Data exported successfully.')
 except Exception as e:

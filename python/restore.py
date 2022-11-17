@@ -51,19 +51,19 @@ if not is_index_file:
     exit()
 
 # Load the json files so that the data can be restored
-with open(f'{current_path}/{ALGOLIA_INDEX_NAME}_index.json', 'r') as f:
+with open(f'{current_path}/{ALGOLIA_INDEX_NAME}_index.json', 'r', encoding='utf-16') as f:
     index_data = json.load(f)
 
 if is_settings_file:
-    with open(f'{current_path}/{ALGOLIA_INDEX_NAME}_settings.json', 'r') as f:
+    with open(f'{current_path}/{ALGOLIA_INDEX_NAME}_settings.json', 'r', encoding='utf-16') as f:
         settings_data = json.load(f)
 
 if is_rules_file:
-    with open(f'{current_path}/{ALGOLIA_INDEX_NAME}_rules.json', 'r') as f:
+    with open(f'{current_path}/{ALGOLIA_INDEX_NAME}_rules.json', 'r', encoding='utf-16') as f:
         rules_data = json.load(f)
 
 if is_synonyms_file:
-    with open(f'{current_path}/{ALGOLIA_INDEX_NAME}_synonyms.json', 'r') as f:
+    with open(f'{current_path}/{ALGOLIA_INDEX_NAME}_synonyms.json', 'r', encoding='utf-16') as f:
         synonyms_data = json.load(f)
 
 # Check the status of the current index.
