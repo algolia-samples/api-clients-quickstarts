@@ -64,7 +64,7 @@ def create_json(data, name):
     Converts a list to a json file
     '''
     if data:
-        json_data = json.dumps(list)
+        json_data = json.dumps(data)
         with open(f'{ALGOLIA_INDEX_NAME}_{name}.json', 'w', encoding='utf-16') as file:
             file.write(json_data)
 
@@ -72,9 +72,13 @@ def create_json(data, name):
 print('Exporting data...')
 try:
     create_json(records, 'index')
+    print('Exported index.')
     create_json(settings, 'settings')
+    print('Exported settings.')
     create_json(rules, 'rules')
+    print('Exported rules.')
     create_json(synonyms, 'synonyms')
+    print('Exported synonyms.')
     print('Data exported successfully.')
 except Exception as e:
     print(f'Error exporting data: {e}')
