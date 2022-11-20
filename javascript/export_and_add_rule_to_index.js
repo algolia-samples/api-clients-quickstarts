@@ -1,6 +1,8 @@
 // Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
 const algoliasearch = require("algoliasearch");
 const dotenv = require("dotenv");
+// Requiring fs module in which writeFile function is defined.
+const fs = require("fs");
 
 dotenv.config();
 
@@ -18,48 +20,63 @@ const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
 const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
-
-index.browseRules({
-    // A `batch` callback function that's called
-    // on every batch of rules with the
-    // signature: (rules: Rules[]) => any
-    batch: batch => console.log(batch)
-  }).then((response)=> {
-    // console.log(response)
+// Export Rules for this index
+// https://www.algolia.com/doc/api-reference/api-methods/export-rules/
+index
+  .browseRules({
+    // A `batch` callback function that's called on every batch of rules
+    batch: (batch) =>
+      // Export JSON file containing Rules into same directory with prefix of index_name
+      fs.writeFile(
+        `${ALGOLIA_INDEX_NAME}_rules.json`,
+        JSON.stringify(batch),
+        (err) => {
+          // In case of a error throw err.
+          if (err) throw err;
+        }
+      ),
   })
+  .then((response) => {
+    // Success message
+    console.log(
+      `Rules saved as ${ALGOLIA_INDEX_NAME}_rules.json in the current directory`
+    );
+  })
+  .catch((error) => console.log(error));
 
-  // Create a rule
-  const rule = {
-    objectID: 'a-rule-id',
-    conditions: [{
-      pattern: 'Jimmie',
-      anchoring: 'is'
-    }],
-    consequence: {
-      params: {
-        filters: 'zip_code = 12345'
-      }
+// Create a rule
+const rule = {
+  objectID: "a-rule-id",
+  conditions: [
+    {
+      pattern: "Jimmie",
+      anchoring: "is",
     },
-  
-    // Optionally, to disable the rule
-    enabled: true,
-  
-    // Optionally, to add valitidy time ranges
-    validity: [
-      {
-        from: Math.floor(Date.now()/1000),
-        until: Math.floor(Date.now()/1000) + 10*24*60*60,
-      }
-    ]
-  };
-  
-  // Save the Rule.
-  index.saveRule(rule).then(() => {
-    // done
-  });
-  
-  // Save the Rule, and forward it to all replicas of the index.
-  index.saveRule(rule, {forwardToReplicas: true}).then(() => {
-    // done
-  });
-  
+  ],
+  consequence: {
+    params: {
+      filters: "zip_code = 12345",
+    },
+  },
+
+  // Optionally, to disable the rule change to 'false'
+  enabled: true,
+
+  // Optionally, to add valitidy time ranges
+  validity: [
+    {
+      from: Math.floor(Date.now() / 1000),
+      until: Math.floor(Date.now() / 1000) + 10 * 24 * 60 * 60,
+    },
+  ],
+};
+
+// Save the Rule.
+index.saveRule(rule).then(() => {
+  // done
+});
+
+// Save the Rule, and forward it to all replicas of the index.
+index.saveRule(rule, { forwardToReplicas: true }).then(() => {
+  // done
+});
