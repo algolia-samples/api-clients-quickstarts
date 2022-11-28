@@ -36,3 +36,6 @@ python simple.py
 | ------------- | ------------- |
 | [simple.py](./simple.py)  | Index a single object and run a search query |
 | [indexing.py](./indexing.py)  | Showcase of the main indexing methods |
+| [generate_key.py](./generate_key.py)  | Generate a rate limited API key |
+| [backup.py](./backup.py)  | Backup an index and associated rules, synonyms and settings |
+| [restore.py](./restore.py)  | Restore an index from a local file |
