@@ -18,20 +18,35 @@ const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
 const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
-// Add new objects to the index
-// https://www.algolia.com/doc/api-reference/api-methods/add-objects/
-const newObject = { objectID: 1, name: "Foo" };
 
-index
-  .saveObjects([newObject])
-  // Wait for the indexing task to complete
-  // https://www.algolia.com/doc/api-reference/api-methods/wait-task/
-  .wait()
-  .then((response) => {
-    console.log(response);
-    // Search the index for "Fo"
-    // https://www.algolia.com/doc/api-reference/api-methods/search/
-    index.search("Fo").then((objects) => console.log(objects)).catch();
-  }) ;
+// const newObject = { objectID: 1, name: "Foo" };
+
+// index
+//   .saveObjects([newObject])
+//   // Wait for the indexing task to complete
+//   // https://www.algolia.com/doc/api-reference/api-methods/wait-task/
+//   .wait()
+//   .then((response) => {
+//     console.log(response);
+//     // Search the index for "Fo"
+//     // https://www.algolia.com/doc/api-reference/api-methods/search/
+    // index.search("Fo").then((objects) => console.log(objects)).catch();
+
+
+
+
+fetch(
+	`https://analytics.algolia.com/2/searches?index=${ALGOLIA_INDEX_NAME}&limit=1000`,
+	{
+		method: 'GET',
+		headers: {
+			"X-Algolia-API-Key": `${ALGOLIA_API_KEY}`,
+            "X-Algolia-Application-Id": `${ALGOLIA_APP_ID}`
+
+		}
+	}
+).then(res => res.json())
+.catch(error => console.error('Error:', error))
+.then(response => console.log('Your top searches are:', response));
 
 
