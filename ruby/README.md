@@ -36,3 +36,6 @@ ruby simple.rb
 | ------------- | ------------- |
 | [simple.rb](./simple.rb)  | Index a single object and run a search query |
 | [indexing.rb](./indexing.rb)  | Showcase of the main indexing methods |
+| [generate_key.rb](./generate_key.rb)  | Generate a search only rate limited API key |
+| [index_settings.rb](./index_settings.rb)  | Change index settings |
+
