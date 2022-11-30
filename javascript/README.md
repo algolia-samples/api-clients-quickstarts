@@ -41,3 +41,7 @@ node simple.js
 | [simple.js](./simple.js)     | Index a single object and run a search query |
 
 | [indexing.js](./indexing.js) | Showcase of the main indexing methods        |
+
+| [generate_key.js](./generate_key.js) | Generate a rate-limited search only API key |
+
+
