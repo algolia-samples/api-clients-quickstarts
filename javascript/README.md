@@ -44,4 +44,8 @@ node simple.js
 
 | [generate_key.js](./generate_key.js) | Generate a rate-limited search only API key |
 
+| [export_and_add_rule_to_index.js](./export_and_add_rule_to_index.js) | Export and add Rules to index |
+
+
+
 
