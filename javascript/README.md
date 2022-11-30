@@ -46,6 +46,8 @@ node simple.js
 
 | [export_and_add_rule_to_index.js](./export_and_add_rule_to_index.js) | Export and add Rules to index |
 
+| [change_index_settings.js](./change_index_settings.js) | Change index settings |
+
 
 
 
