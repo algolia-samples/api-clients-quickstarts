@@ -36,3 +36,5 @@ php simple.php
 | ------------- | ------------- |
 | [simple.php](./simple.php)  | Index a single object and run a search query |
 | [indexing.php](./indexing.php)  | Showcase of the main indexing methods |
+| [backup.php](./backup.php)  | Backup an index |
+| [restore.php](./restore.php)  | Restore an index |
