@@ -20,31 +20,8 @@ const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
 const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
-// // Create fetch request to Rest API
-
-// fetch(
-//   `https://analytics.algolia.com/2/searches?index=${ALGOLIA_INDEX_NAME}&limit=1000`,
-//   {
-//     method: "GET",
-//     headers: {
-//       "X-Algolia-API-Key": `${ALGOLIA_API_KEY}`,
-//       "X-Algolia-Application-Id": `${ALGOLIA_APP_ID}`,
-//     },
-//   }
-// )
-//   .then((res) => res.json())
-//   .catch((error) => console.error("Error:", error))
-//   .then((response) =>
-//     fs.writeFile(
-//       `${ALGOLIA_INDEX_NAME}_top_1000_searches.json`,
-//       JSON.stringify(response),
-//       (err) => {
-//         // In case of a error throw err.
-//         if (err) throw err;
-//       }
-//     )
-//   );
-
+// // Create fetch request to Rest API for top searches limited to 1000
+// https://www.algolia.com/doc/rest-api/analytics/#get-top-searches
 (async () => {
   const response = await fetch(
     `https://analytics.algolia.com/2/searches?index=${ALGOLIA_INDEX_NAME}&limit=1000`,
@@ -61,6 +38,7 @@ const index = client.initIndex(ALGOLIA_INDEX_NAME);
   }
   const data = await response.json();
   console.log("creating JSON file...");
+  // Create JSON file and export to current directory
   fs.writeFile(
     `${ALGOLIA_INDEX_NAME}_top_1000_searches.json`,
     JSON.stringify(data),
