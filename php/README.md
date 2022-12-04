@@ -36,3 +36,4 @@ php simple.php
 | ------------- | ------------- |
 | [simple.php](./simple.php)  | Index a single object and run a search query |
 | [indexing.php](./indexing.php)  | Showcase of the main indexing methods |
+| [rules.php](./rules.php)  | Export rules and add a new rule to an index |
