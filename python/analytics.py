@@ -50,7 +50,7 @@ searches = content['searches']
 
 # Create a csv file with the data
 keys = searches[0].keys()
-with open(f'{ALGOLIA_INDEX_NAME}_analytics.csv', 'w') as f:
+with open(f'{ALGOLIA_INDEX_NAME}_top_1000_searches.csv', 'w') as f:
     dict_writer = csv.DictWriter(f, keys, lineterminator='\n')
     dict_writer.writeheader()
     dict_writer.writerows(searches)
