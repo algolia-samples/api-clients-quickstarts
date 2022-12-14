@@ -36,6 +36,7 @@ client.headers = {"X-Algolia-API-Key": ALGOLIA_API_KEY, "X-Algolia-Application-I
 params = {'index': {ALGOLIA_INDEX_NAME}, 'limit': 1000}
 
 # Make the call to the analytics endpoint
+print('Fetching analytics data...')
 try:
     response = client.request("GET", f'{ANALYTICS_DOMAIN}/2/searches', params=params)
 except requests.RequestException:
@@ -45,12 +46,22 @@ if response.status_code != 200:
     print(f'Problem with request: {response.status_code}. Exiting.')
     exit()
 
+print('Analytics data retrieved.')
+
 content = response.json()
 searches = content['searches']
 
+print('Creating CSV file...')
+
 # Create a csv file with the data
-keys = searches[0].keys()
-with open(f'{ALGOLIA_INDEX_NAME}_top_1000_searches.csv', 'w') as f:
-    dict_writer = csv.DictWriter(f, keys, lineterminator='\n')
-    dict_writer.writeheader()
-    dict_writer.writerows(searches)
+try:
+    keys = searches[0].keys()
+    with open(f'{ALGOLIA_INDEX_NAME}_top_1000_searches.csv', 'w') as f:
+        dict_writer = csv.DictWriter(f, keys, lineterminator='\n')
+        dict_writer.writeheader()
+        dict_writer.writerows(searches)
+except Exception:
+    print('Error creating csv file.')
+    exit()
+
+print(f'CSV file "{ALGOLIA_INDEX_NAME}_top_1000_searches.csv" created.')
