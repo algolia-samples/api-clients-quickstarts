@@ -5,9 +5,6 @@ This script makes a GET request to the /searches endpoint on the Analytics REST 
 To get the top 1000 searches over the last 7 days.
 
 There is no API client for Analytics, so this script uses the Python Requests library to make the call.
-
-The script uses the default 'analytics region' - https://analytics.us.algolia.com. Check where your analytics data is stored
-and update the 'ANALYTICS_DOMAIN' variable accordingly. Your analytics region can be found here - https://www.algolia.com/infra/analytics
 '''
 
 import requests
@@ -18,13 +15,13 @@ from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
-# Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
-# and choose a name for your index. Add these environment variables to a `.env` file:
+# Get your Algolia Application ID, (analytics) API key, and Index name from the dashboard: https://www.algolia.com/account/api-keys
+# Get your Algolia analytics domain here: https://www.algolia.com/infra/analytics
+# Add these environment variables to a `.env` file:
 ALGOLIA_APP_ID = getenv('ALGOLIA_APP_ID')
 ALGOLIA_API_KEY = getenv('ALGOLIA_API_KEY')
 ALGOLIA_INDEX_NAME = getenv('ALGOLIA_INDEX_NAME')
-
-ANALYTICS_DOMAIN = "https://analytics.algolia.com"
+ANALYTICS_DOMAIN = getenv('ALGOLIA_ANALYTICS_DOMAIN')
 
 # Initialise requests session
 client = requests.Session()
