@@ -48,6 +48,8 @@ node simple.js
 
 | [change_index_settings.js](./change_index_settings.js) | Change index settings |
 
+| [rest_API_return_top_1000_hits.js](./rest_API_return_top_1000_hits.js) | Return Top 1000 Searches |
+
 
 
 
