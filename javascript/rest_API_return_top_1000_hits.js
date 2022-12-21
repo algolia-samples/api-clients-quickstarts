@@ -1,3 +1,10 @@
+/*
+Analytics API Query
+This script makes a GET request to the /searches endpoint on the Analytics REST API - https://www.algolia.com/doc/rest-api/analytics/. 
+To get the top 1000 searches over the last 7 days.
+There is no API client for Analytics, so this script uses the JavaScript Requests library to make the call.
+*/
+
 // Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
 const algoliasearch = require("algoliasearch");
 const dotenv = require("dotenv");
@@ -43,7 +50,6 @@ const index = client.initIndex(ALGOLIA_INDEX_NAME);
     `${ALGOLIA_INDEX_NAME}_top_1000_searches.json`,
     JSON.stringify(data),
     (err) => {
-      // In case of a error throw err.
       if (err) throw err;
     }
   );
