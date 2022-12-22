@@ -19,14 +19,6 @@ const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
 const fs = require("fs");
 const { fileURLToPath } = require("url");
 
-// Start the API client
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
-
-// Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-const index = client.initIndex(ALGOLIA_INDEX_NAME);
-
 // // Create fetch request to Rest API for top searches limited to 1000
 // https://www.algolia.com/doc/rest-api/analytics/#get-top-searches
 (async () => {
