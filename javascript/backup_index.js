@@ -1,3 +1,9 @@
+/*
+Backup Index
+This script will export an index, including records, settings, rules and synonyms to the current directory.
+It can be used in conjunction with restore.js to backup and restore an index to an application.
+*/
+
 // Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
 const algoliasearch = require("algoliasearch");
 const dotenv = require("dotenv");
@@ -26,80 +32,79 @@ let records = [],
   rules = [],
   synonyms = [];
 
-// Get all records as an iterator
-
 (async () => {
+  // retrieve all records from index
   console.log(`Retrieving records...`);
+  try {
+    await index.browseObjects({
+      batch: (batch) => {
+        records = records.concat(batch);
+      },
+    });
 
-  await index.browseObjects({
-    batch: (batch) => {
-      records = records.concat(batch);
+    console.log(`${records.length} records retrieved`);
 
+    console.log(`Retrieving settings...`);
+
+    // retrieve all index settings
+    settings = await index.getSettings().then();
+
+    console.log(`settings retrieved`);
+
+    console.log(`Retrieving rules...`);
+
+    // retrieve all rules for index
+    await index
+      .browseRules({
+        batch: (batch) => {
+          rules = rules.concat(batch);
+        },
+      })
+      .then();
+
+    console.log(`${rules.length} rules retrieved`);
+
+    console.log(`Retrieving synonyms...`);
+
+    // retrieve all synonyms for index
+    await index
+      .browseSynonyms({
+        batch: (batch) => {
+          synonyms = synonyms.concat(batch);
+        },
+      })
+      .then();
+
+    console.log(`${synonyms.length} synonyms retrieved`);
+  } catch (error) {
+    console.log(`Error retrieving data ${error}`);
+  }
+
+  //   write json files to current directory
+  function createJson(data, name) {
+    if (data) {
       fs.writeFile(
-        `${ALGOLIA_INDEX_NAME}_records.json`,
-        JSON.stringify(batch),
+        `${ALGOLIA_INDEX_NAME}_${name}.json`,
+        JSON.stringify(data),
         (err) => {
           if (err) throw err;
         }
       );
-    },
-  });
-
-  console.log(`${records.length} records retrieved`);
-
-  console.log(`Retrieving settings...`);
-
-  settings = await index.getSettings().then((settings) => {
-    fs.writeFile(
-      `${ALGOLIA_INDEX_NAME}_settings.json`,
-      JSON.stringify(settings),
-      (err) => {
-        if (err) throw err;
-      }
-    );
-  });
-
-  console.log(`settings retrieved`);
-
-  console.log(`Retrieving rules...`);
-
-  await index
-    .browseRules({
-      batch: (batch) => {
-        rules = rules.concat(batch);
-        fs.writeFile(
-          `${ALGOLIA_INDEX_NAME}_rules.json`,
-          JSON.stringify(batch),
-          (err) => {
-            if (err) throw err;
-          }
-        );
-      },
-    })
-    .then(() => {
-      // done
-    });
-
-  console.log(`${rules.length} rules retrieved`);
-
-  console.log(`Retrieving synonyms...`);
-
-  await index
-    .browseSynonyms({
-      batch: (batch) => {
-        synonyms = synonyms.concat(batch);
-
-        fs.writeFile(
-          `${ALGOLIA_INDEX_NAME}_synonyms.json`,
-          JSON.stringify(batch),
-          (err) => {
-            if (err) throw err;
-          }
-        );
-      },
-    })
-    .then(() => {
-    });
-
-  console.log(`${synonyms.length} synonyms retrieved`);
+    } else
+      (error) => {
+        console.log(`Error writing files: ${error}`);
+      };
+  }
+  try {
+    let name = "records";
+    createJson(records, name);
+    name = "settings";
+    createJson(settings, name);
+    name = "rules";
+    createJson(rules, name);
+    name = "synonyms";
+    createJson(synonyms, name);
+  } catch (error) {
+    console.log(`Error exporting data ${error}`);
+  }
 })();
