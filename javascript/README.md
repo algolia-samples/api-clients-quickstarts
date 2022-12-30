@@ -50,6 +50,9 @@ node simple.js
 
 | [rest_API_return_top_1000_hits.js](./rest_API_return_top_1000_hits.js) | Return Top 1000 Searches |
 
+| [backup_index.js](./backup_index.js) | Generates a backup of records, settings, synonyms and rules in separate JSON files |
+
+
 
 
 
