@@ -39,7 +39,7 @@ let records = [],
     await index.browseObjects({
       batch: (batch) => {
         records = records.concat(batch);
-      },
+      }
     });
 
     console.log(`${records.length} records retrieved`);
@@ -58,9 +58,8 @@ let records = [],
       .browseRules({
         batch: (batch) => {
           rules = rules.concat(batch);
-        },
-      })
-      .then();
+        }
+      });
 
     console.log(`${rules.length} rules retrieved`);
 
@@ -72,8 +71,7 @@ let records = [],
         batch: (batch) => {
           synonyms = synonyms.concat(batch);
         },
-      })
-      .then();
+      });
 
     console.log(`${synonyms.length} synonyms retrieved`);
   } catch (error) {

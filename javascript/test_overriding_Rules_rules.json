@@ -1,0 +1,1 @@
+[{"_metadata":{"lastUpdate":1671538656},"conditions":[{"anchoring":"contains","pattern":"piano","alternatives":true}],"consequence":{"params":{"filters":"type:piano"},"filterPromotes":true},"enabled":true,"objectID":"qr-1671538621140"}]
