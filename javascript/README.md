@@ -52,6 +52,7 @@ node simple.js
 
 | [backup_index.js](./backup_index.js) | Generates a backup of records, settings, synonyms and rules in separate JSON files |
 
+| [restore_index.js](./restore_index.js) | Allows user to restore a backup of records, settings, synonyms and rules to an index |
 
 
 
