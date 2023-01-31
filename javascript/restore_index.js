@@ -18,7 +18,7 @@ const algoliasearch = require("algoliasearch");
 const dotenv = require("dotenv");
 dotenv.config();
 
-// Requiring built in modules for fs (file system) and readline (console interface).
+// Requiring built in modules for fs (file system) and readline (console interface)
 const fs = require("fs");
 const readline = require("readline");
 
@@ -36,7 +36,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-// Ask user for index name
+// Function to ask user for index name
 let ALGOLIA_INDEX_NAME;
 
 const askForIndexName = async () => {
