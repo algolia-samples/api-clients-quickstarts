@@ -16,7 +16,16 @@ $ALGOLIA_APP_ID = $_ENV['ALGOLIA_APP_ID'];
 $ALGOLIA_API_KEY = $_ENV['ALGOLIA_API_KEY'];
 $ALGOLIA_INDEX_NAME = $_ENV['ALGOLIA_INDEX_NAME'];
 
-$url = "https://analytics.de.algolia.com/2/searches?index=$ALGOLIA_INDEX_NAME&limit=1000";
+# The Analytics API can be reached from multiple domains, each specific to a region. 
+# You should use the domain that matches the region where your analytics data is stored and processed. 
+# View your analytics region: https://www.algolia.com/infra/analytics
+# The following domains are available:
+# United States: https://analytics.us.algolia.com
+# Europe (Germany): https://analytics.de.algolia.com
+
+$URL_DOMAIN = $_ENV['URL_DOMAIN'];
+
+$url = "$URL_DOMAIN/2/searches?index=$ALGOLIA_INDEX_NAME&limit=1000";
 
 # Describing HTTP request
 $request_options  = [
