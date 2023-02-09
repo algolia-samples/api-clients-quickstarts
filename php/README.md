@@ -38,4 +38,7 @@ php simple.php
 | [indexing.php](./indexing.php)  | Showcase of the main indexing methods |
 | [change_index_settings.php](./change_index_settings.php)  | Change index settings |
 | [rules.php](./rules.php)  | Export rules and add a new rule to an index |
+| [backup.php](./backup.php)  | Backup an index |
+| [restore.php](./restore.php)  | Restore an index |
 | [rest_api_return_top_hits.php](./rest_api_return_top_hits.php)  | Get top 1000 searches with Analytics REST API
+
