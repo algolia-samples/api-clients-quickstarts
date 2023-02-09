@@ -4,7 +4,6 @@
 # To get the top 1000 searches over the last 7 days.
 # There is no API client for Analytics, so this script uses the PHP Requests library to make the call.
 
-# Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/php/?client=php
 require __DIR__ . '/vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
