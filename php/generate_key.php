@@ -37,8 +37,6 @@ $params = [
 print("Creating new key...\n");
 $res = $client->addApiKey($acl, $params)->wait();
 
-echo 'key=' . $res['key'] . "\n";
-
 $new_key = $res['key'];
 
 if ($new_key = $res['key']) {
@@ -59,7 +57,6 @@ $index = $client->initIndex($ALGOLIA_INDEX_NAME);
 
 # Test the new generated key by performing a search
 if ($search_res = $index->search('')) {
-    var_dump($search_res);
     echo "Successful key test\n";
 } else {
     echo "Failed search with the new key\n";
