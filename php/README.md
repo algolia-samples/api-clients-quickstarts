@@ -40,5 +40,5 @@ php simple.php
 | [rules.php](./rules.php)  | Export rules and add a new rule to an index |
 | [backup.php](./backup.php)  | Backup an index |
 | [restore.php](./restore.php)  | Restore an index |
-| [rest_api_return_top_hits.php](./rest_api_return_top_hits.php)  | Get top 1000 searches with Analytics REST API
-
+| [rest_api_return_top_hits.php](./rest_api_return_top_hits.php)  | Get top 1000 searches with Analytics REST API |
+| [generate_key.php](./generate_key.php)  |  Generate a rate-limited search only API key |
