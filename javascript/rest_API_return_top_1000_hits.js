@@ -19,19 +19,26 @@ const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
 const fs = require("fs");
 const { fileURLToPath } = require("url");
 
-// Start the API client
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
+/*
+# The Analytics API can be reached from multiple domains, each specific to a region. 
+# You should use the domain that matches the region where your analytics data is stored and processed. 
+# View your analytics region: https://www.algolia.com/infra/analytics
+# The following domains are available:
+# United States: https://analytics.us.algolia.com
+# Europe (Germany): https://analytics.de.algolia.com
+*/
 
-// Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-const index = client.initIndex(ALGOLIA_INDEX_NAME);
+
+const URL_DOMAIN = process.env.URL_DOMAIN;
+
+const url = `https://analytics.${URL_DOMAIN}.algolia.com`
+
 
 // // Create fetch request to Rest API for top searches limited to 1000
 // https://www.algolia.com/doc/rest-api/analytics/#get-top-searches
 (async () => {
   const response = await fetch(
-    `https://analytics.algolia.com/2/searches?index=${ALGOLIA_INDEX_NAME}&limit=1000`,
+    `${url}/2/searches?index=${ALGOLIA_INDEX_NAME}&limit=1000`,
     {
       method: "GET",
       headers: {
