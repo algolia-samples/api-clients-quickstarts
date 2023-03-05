@@ -3,7 +3,7 @@ Restore Index
 
 This script will restore an index, including any settings, rules and synonyms.
 
-It is best used in conjuction with backup.py to backup and restore an index to an application.
+It is best used in conjuction with backup_index.js to backup and restore an index to an application.
 
 When run, the user will be prompted to enter an index name. The script will look for files prefixed
 with this index name to use for the restore. E.g. if the index name is 'my-index', the script will
