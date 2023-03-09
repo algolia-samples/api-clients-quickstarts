@@ -4,18 +4,19 @@ This script makes a GET request to the /searches endpoint on the Analytics REST 
 To get the top 1000 searches over the last 7 days.
 There is no API client for Analytics, so this script uses the JavaScript Requests library to make the call.
 */
-
+try {
 // Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
 const algoliasearch = require("algoliasearch");
 const dotenv = require("dotenv");
-
 dotenv.config();
 
 // Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
-// and choose a name for your index. Add these environment variables to a `.env` file:
+// use the name of the index you want to target. Add these environment variables to the `.env` file:
 const ALGOLIA_APP_ID = process.env.ALGOLIA_APP_ID;
 const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY;
 const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
+const URL_DOMAIN = process.env.URL_DOMAIN;
+
 const fs = require("fs");
 const { fileURLToPath } = require("url");
 
@@ -26,13 +27,10 @@ const { fileURLToPath } = require("url");
 # The following domains are available:
 # United States: https://analytics.us.algolia.com
 # Europe (Germany): https://analytics.de.algolia.com
+Add this environment variable to the '.env' file 
 */
 
-
-const URL_DOMAIN = process.env.URL_DOMAIN;
-
-const url = `https://analytics.${URL_DOMAIN}.algolia.com`
-
+let url = `https://analytics.${URL_DOMAIN}.algolia.com`;
 
 // // Create fetch request to Rest API for top searches limited to 1000
 // https://www.algolia.com/doc/rest-api/analytics/#get-top-searches
@@ -62,3 +60,6 @@ const url = `https://analytics.${URL_DOMAIN}.algolia.com`
   );
   console.log(`JSON file "${ALGOLIA_INDEX_NAME}_top_1000_searches" created!`);
 })();
+} catch (er) {
+  console.log(er)
+}
