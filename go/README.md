@@ -1,6 +1,6 @@
 # API Clients Quickstarts: Go
 
-This quickstart demonstrates various usages of the the [Algolia Go API Client](https://www.algolia.com/doc/api-client/getting-started/install/python/?client=go).
+This quickstart demonstrates various usages of the the [Algolia Go API Client](https://www.algolia.com/doc/api-client/getting-started/install/go/?client=go).
 
 ## Setting up the quickstart
 
@@ -24,6 +24,15 @@ This quickstart demonstrates various usages of the the [Algolia Go API Client](h
 
 ## How to use
 
+The module has two dependencies:
+* [Algolia GO API client](github.com/algolia/algoliasearch-client-go/v3)
+* [GoDotEnv](https://github.com/joho/godotenv) - for using environment variables
+
+Install these dependencies using the go build command.
+
+```bash
+go build
+```
 Once setup, you can run each of the script in this folder using the Go command line.
 Example: to execute the `simple.go` script:
 
@@ -37,3 +46,4 @@ go run simple.go
 | ------------- | ------------- |
 | [simple.go](./simple.go)  | Index a single object and run a search query |
 | [indexing.go](./indexing.go)  | Showcase of the main indexing methods |
+| [generate_key.go](./generate_key.go) | Generate a rate limted search API key |

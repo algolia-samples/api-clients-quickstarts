@@ -41,3 +41,19 @@ node simple.js
 | [simple.js](./simple.js)     | Index a single object and run a search query |
 
 | [indexing.js](./indexing.js) | Showcase of the main indexing methods        |
+
+| [generate_key.js](./generate_key.js) | Generate a rate-limited search only API key |
+
+| [export_and_add_rule_to_index.js](./export_and_add_rule_to_index.js) | Export and add Rules to index |
+
+| [change_index_settings.js](./change_index_settings.js) | Change index settings |
+
+| [rest_API_return_top_1000_hits.js](./rest_API_return_top_1000_hits.js) | Return Top 1000 Searches |
+
+| [backup_index.js](./backup_index.js) | Generates a backup of records, settings, synonyms and rules in separate JSON files |
+
+| [restore_index.js](./restore_index.js) | Allows user to restore a backup of records, settings, synonyms and rules to an index |
+
+
+
+
