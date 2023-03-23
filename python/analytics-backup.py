@@ -22,8 +22,9 @@ now = datetime.now()
 timestamp = now.strftime("%Y-%m-%d_%H:%M:%S")
 
 # Get your Algolia Application ID, (analytics) API key, and Index name from the dashboard: https://www.algolia.com/account/api-keys
-# Get your Algolia analytics domain here: https://www.algolia.com/infra/analytics
-# Add these environment variables to a `.env` file:
+# Get your Algolia analytics region here: https://www.algolia.com/infra/analytics
+# Read more about analytics domains here: https://www.algolia.com/doc/rest-api/analytics/
+# Add these environment variables to a `.env` file (you can use the .env.example file as a template).
 ALGOLIA_APP_ID = getenv('ALGOLIA_APP_ID')
 ALGOLIA_API_KEY = getenv('ALGOLIA_API_KEY')
 ALGOLIA_INDEX_NAME = getenv('ALGOLIA_INDEX_NAME')
