@@ -100,7 +100,7 @@ queries = [
     {'endpoint': 'searches', 'metric': 'searches'}, 
     {'endpoint': 'searches/count', 'metric': 'count'},
     {'endpoint': 'searches/noResults', 'metric': 'searches'},
-    {'endpoint': 'users/count', 'metric': 'cunt'},
+    {'endpoint': 'users/count', 'metric': 'count'},
     {'endpoint': 'hits', 'metric': 'hits'},
     {'endpoint': 'searches/noResultRate', 'metric': 'rate'},
     {'endpoint': 'searches/noClickRate', 'metric': 'rate'}
