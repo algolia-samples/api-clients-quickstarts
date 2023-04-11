@@ -5,8 +5,6 @@ To get the top 1000 searches over the last 7 days.
 There is no API client for Analytics, so this script uses the JavaScript Requests library to make the call.
 */
 try {
-// Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
-const algoliasearch = require("algoliasearch");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -18,7 +16,6 @@ const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
 const URL_DOMAIN = process.env.URL_DOMAIN;
 
 const fs = require("fs");
-const { fileURLToPath } = require("url");
 
 /*
 # The Analytics API can be reached from multiple domains, each specific to a region. 
