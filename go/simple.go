@@ -49,7 +49,7 @@ func main() {
 		os.Exit(1)
 	}
 
-  // Search the index for "Fo"
+  // Search the index for "Foo"
 	// https://www.algolia.com/doc/api-reference/api-methods/search/
 	res, err := index.Search("Foo")
 	if err != nil {
