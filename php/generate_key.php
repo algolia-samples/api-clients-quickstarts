@@ -24,25 +24,29 @@ $client = \Algolia\AlgoliaSearch\SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_
 # https://www.algolia.com/doc/api-reference/api-methods/add-api-key/#method-param-acl
 $acl = ["search"];
 
-// Set the parameters for API key
-// https://www.algolia.com/doc/api-reference/api-methods/add-api-key/#method-param-maxqueriesperipperhour
 
-$params = [
-    'description'            => 'Restricted search-only API key for algolia.com',
-    // Rate-limit to 100 requests per hour per IP address
-    'maxQueriesPerIPPerHour' => 100
-];
+try {
+    // Set the parameters for API key
+    // https://www.algolia.com/doc/api-reference/api-methods/add-api-key/#method-param-maxqueriesperipperhour
+    $params = [
+        'description'=> 'Restricted search-only API key for algolia.com',
+        // Rate-limit to 100 requests per hour per IP address
+        'maxQueriesPerIPPerHour' => 100
+    ];
 
-# Create a new restricted search-only API key
-print("Creating new key...\n");
-$res = $client->addApiKey($acl, $params)->wait();
-
-$new_key = $res['key'];
-
-if ($new_key = $res['key']) {
-    echo "Key generated successfully: $new_key \n";
-} else {
-    echo "Error while creating key\n";
+    # Create a new restricted search-only API key
+    print("Creating new key...\n");
+    $res = $client->addApiKey($acl, $params)->wait();
+    $new_key = $res['key'];
+    if (strlen($new_key)==32) {
+        echo "Key generated successfully: $new_key \n";
+    } else {
+        echo "Failed search with the new key\n";
+    }
+    
+}
+catch (Exception $e) {
+    echo 'Message: ' .$e->getMessage();
 }
 
 # Test the created key
@@ -55,9 +59,17 @@ $client = \Algolia\AlgoliaSearch\SearchClient::create($ALGOLIA_APP_ID, $new_key)
 # https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
 $index = $client->initIndex($ALGOLIA_INDEX_NAME);
 
-# Test the new generated key by performing a search
-if ($search_res = $index->search('')) {
-    echo "Successful key test\n";
-} else {
-    echo "Failed search with the new key\n";
+try {
+    # Test the new generated key by performing a search
+    if ($search_res = $index->search('')) {
+        echo "Successful key test\n";
+    } else {
+        echo "Failed search with the new key\n";
+    }
 }
+catch (Exception $e) {
+    echo 'Message: ' .$e->getMessage();
+}
+
+?>
+
