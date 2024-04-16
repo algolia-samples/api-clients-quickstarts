@@ -4,34 +4,36 @@ This script makes a GET request to the /searches endpoint on the Analytics REST 
 To get the top 1000 searches over the last 7 days.
 There is no API client for Analytics, so this script uses the JavaScript Requests library to make the call.
 */
-
-// Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
-const algoliasearch = require("algoliasearch");
+try {
 const dotenv = require("dotenv");
-
 dotenv.config();
 
 // Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
-// and choose a name for your index. Add these environment variables to a `.env` file:
+// use the name of the index you want to target. Add these environment variables to the `.env` file:
 const ALGOLIA_APP_ID = process.env.ALGOLIA_APP_ID;
 const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY;
 const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
+const URL_DOMAIN = process.env.URL_DOMAIN;
+
 const fs = require("fs");
-const { fileURLToPath } = require("url");
 
-// Start the API client
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
+/*
+# The Analytics API can be reached from multiple domains, each specific to a region. 
+# You should use the domain that matches the region where your analytics data is stored and processed. 
+# View your analytics region: https://www.algolia.com/infra/analytics
+# The following domains are available:
+# United States: https://analytics.us.algolia.com
+# Europe (Germany): https://analytics.de.algolia.com
+Add this environment variable to the '.env' file 
+*/
 
-// Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-const index = client.initIndex(ALGOLIA_INDEX_NAME);
+let url = `https://analytics.${URL_DOMAIN}.algolia.com`;
 
 // // Create fetch request to Rest API for top searches limited to 1000
 // https://www.algolia.com/doc/rest-api/analytics/#get-top-searches
 (async () => {
   const response = await fetch(
-    `https://analytics.algolia.com/2/searches?index=${ALGOLIA_INDEX_NAME}&limit=1000`,
+    `${url}/2/searches?index=${ALGOLIA_INDEX_NAME}&limit=1000`,
     {
       method: "GET",
       headers: {
@@ -55,3 +57,6 @@ const index = client.initIndex(ALGOLIA_INDEX_NAME);
   );
   console.log(`JSON file "${ALGOLIA_INDEX_NAME}_top_1000_searches" created!`);
 })();
+} catch (er) {
+  console.log(er)
+}
