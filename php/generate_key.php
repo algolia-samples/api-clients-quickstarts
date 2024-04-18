@@ -26,7 +26,7 @@ $acl = ["search"];
 
 
 try {
-    // Set the parameters for API key
+    // Set the parameters for the API key
     // https://www.algolia.com/doc/api-reference/api-methods/add-api-key/#method-param-maxqueriesperipperhour
     $params = [
         'description'=> 'Restricted search-only API key for algolia.com',
