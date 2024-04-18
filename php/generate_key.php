@@ -38,7 +38,7 @@ try {
     print("Creating new key...\n");
     $res = $client->addApiKey($acl, $params)->wait();
     $new_key = $res['key'];
-    if (strlen($new_key)==32) {
+    if ($new_key = $res['key'] ?? false && strlen($new_key)===32) {
         echo "Key generated successfully: $new_key \n";
     } else {
         echo "Failed search with the new key\n";
