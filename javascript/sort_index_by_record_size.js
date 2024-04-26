@@ -26,10 +26,7 @@ const index = client.initIndex(ALGOLIA_INDEX_NAME);
 // Requiring fs module in which writeFile function is defined.
 const fs = require("fs");
 
-let records = [],
-  settings = [],
-  rules = [],
-  synonyms = [];
+let records = [];
 
 (async () => {
   // retrieve all records from index
@@ -55,7 +52,7 @@ let records = [],
 
     
   } catch (error) {
-    console.log(`Error retrieving data ${error}`);
+    console.log(`Error retrieving data ${error.message}`);
   }
 
   //   write json files to current directory
@@ -70,13 +67,13 @@ let records = [],
       );
     } else
       (error) => {
-        console.log(`Error writing files: ${error}`);
+        console.log(`Error writing files: ${error.message}`);
       };
   }
   try {
     let name = "records";
     createJson(records, name);
   } catch (error) {
-    console.log(`Error exporting data ${error}`);
+    console.log(`Error exporting data ${error.message}`);
   }
 })();

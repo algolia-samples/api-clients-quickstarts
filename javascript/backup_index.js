@@ -75,7 +75,7 @@ let records = [],
 
     console.log(`${synonyms.length} synonyms retrieved`);
   } catch (error) {
-    console.log(`Error retrieving data ${error}`);
+    console.log(`Error retrieving data ${error.message}`);
   }
 
   //   write json files to current directory
@@ -90,7 +90,7 @@ let records = [],
       );
     } else
       (error) => {
-        console.log(`Error writing files: ${error}`);
+        console.log(`Error writing files: ${error.message}`);
       };
   }
   try {
@@ -103,6 +103,6 @@ let records = [],
     name = "synonyms";
     createJson(synonyms, name);
   } catch (error) {
-    console.log(`Error exporting data ${error}`);
+    console.log(`Error exporting data ${error.message}`);
   }
 })();
