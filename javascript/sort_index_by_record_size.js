@@ -1,7 +1,6 @@
 /*
-Backup Index
-This script will export an index, including records, settings, rules and synonyms to the current directory.
-It can be used in conjunction with restore.js to backup and restore an index to an application.
+Sort Index By Record Size
+Sometimes we want to easily find the largest record in an index (in file size) so we can investigate situations where some small number of records are over the fileSizeLimit. This script is designed to fetch the entire index and then sort it by the total string size, and then export it to a file for analysis.
 */
 
 // Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
