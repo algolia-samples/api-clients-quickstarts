@@ -1,7 +1,6 @@
 /*
-Backup Index
-This script will export an index, including records, settings, rules and synonyms to the current directory.
-It can be used in conjunction with restore.js to backup and restore an index to an application.
+Sort Index By Record Size
+Sometimes we want to easily find the largest record in an index (in file size) so we can investigate situations where some small number of records are over the fileSizeLimit. This script is designed to fetch the entire index and then sort it by the total string size, and then export it to a file for analysis.
 */
 
 // Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
@@ -27,10 +26,7 @@ const index = client.initIndex(ALGOLIA_INDEX_NAME);
 // Requiring fs module in which writeFile function is defined.
 const fs = require("fs");
 
-let records = [],
-  settings = [],
-  rules = [],
-  synonyms = [];
+let records = [];
 
 (async () => {
   // retrieve all records from index
@@ -38,42 +34,23 @@ let records = [],
   try {
     await index.browseObjects({
       batch: (batch) => {
+
+        // This method gets an approximation of the size of the record (total string length) we can use for sorting purposes 
+        for (let i = 0; i < batch.length; i++) {
+            batch[i].string_length = JSON.stringify(batch[i]).length;
+        } 
         records = records.concat(batch);
       }
     });
 
     console.log(`${records.length} records retrieved`);
 
-    console.log(`Retrieving settings...`);
+    console.log(`Sorting Records By Size...`);
 
-    // retrieve all index settings
-    settings = await index.getSettings().then();
+    // Sort the result so the largest string length is at the beggining
+    records.sort((a, b) => b.string_length - a.string_length);
 
-    console.log(`settings retrieved`);
-
-    console.log(`Retrieving rules...`);
-
-    // retrieve all rules for index
-    await index
-      .browseRules({
-        batch: (batch) => {
-          rules = rules.concat(batch);
-        }
-      });
-
-    console.log(`${rules.length} rules retrieved`);
-
-    console.log(`Retrieving synonyms...`);
-
-    // retrieve all synonyms for index
-    await index
-      .browseSynonyms({
-        batch: (batch) => {
-          synonyms = synonyms.concat(batch);
-        },
-      });
-
-    console.log(`${synonyms.length} synonyms retrieved`);
+    
   } catch (error) {
     console.log(`Error retrieving data ${error.message}`);
   }
@@ -96,12 +73,6 @@ let records = [],
   try {
     let name = "records";
     createJson(records, name);
-    name = "settings";
-    createJson(settings, name);
-    name = "rules";
-    createJson(rules, name);
-    name = "synonyms";
-    createJson(synonyms, name);
   } catch (error) {
     console.log(`Error exporting data ${error.message}`);
   }
