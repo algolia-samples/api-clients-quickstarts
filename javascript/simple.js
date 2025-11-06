@@ -1,8 +1,6 @@
 // Install the API client: https://www.algolia.com/doc/libraries/sdk/install#javascript
-const algoliasearch = require("algoliasearch");
-const dotenv = require("dotenv");
-
-dotenv.config();
+import { algoliasearch } from "algoliasearch";
+import 'dotenv/config'
 
 // Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
 // and choose a name for your index. Add these environment variables to a `.env` file:
@@ -16,22 +14,32 @@ const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 
 // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
 // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-const index = client.initIndex(ALGOLIA_INDEX_NAME);
+const indexName = ALGOLIA_INDEX_NAME;
 
 // Add new objects to the index
 // https://www.algolia.com/doc/api-reference/api-methods/add-objects/
 const newObject = { objectID: 1, name: "Foo" };
 
-index
-  .saveObjects([newObject])
-  // Wait for the indexing task to complete
-  // https://www.algolia.com/doc/api-reference/api-methods/wait-task/
-  .wait()
-  .then((response) => {
-    console.log(response);
-    // Search the index for "Fo"
-    // https://www.algolia.com/doc/api-reference/api-methods/search/
-    index.search("Fo").then((objects) => console.log(objects)).catch();
-  }) ;
+const { taskID } = await client.saveObject({
+  indexName,
+  body: newObject,
+});
 
+// Wait until indexing is done
+await client.waitForTask({
+  indexName,
+  taskID,
+});
+
+// Search for "test"
+const { results } = await client.search({
+  requests: [
+    {
+      indexName,
+      query: "Fo",
+    },
+  ],
+});
+
+console.log(JSON.stringify(results));
 
