@@ -1,4 +1,4 @@
-// Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
+// Install the API client: https://www.algolia.com/doc/libraries/sdk/install#javascript
 const algoliasearch = require("algoliasearch");
 const dotenv = require("dotenv");
 
