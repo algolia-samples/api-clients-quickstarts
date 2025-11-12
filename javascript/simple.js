@@ -9,15 +9,15 @@ const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY;
 const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
 
 // Start the API client
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
+// https://www.algolia.com/doc/libraries/sdk/install#test-your-installation
 const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 
 // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
+// https://www.algolia.com/doc/libraries/sdk/install#test-your-installation
 const indexName = ALGOLIA_INDEX_NAME;
 
 // Add new objects to the index
-// https://www.algolia.com/doc/api-reference/api-methods/add-objects/
+// https://www.algolia.com/doc/libraries/sdk/methods/search/save-object
 const newObject = { objectID: 1, name: "Foo" };
 
 const { taskID } = await client.saveObject({
@@ -26,12 +26,14 @@ const { taskID } = await client.saveObject({
 });
 
 // Wait until indexing is done
+// https://www.algolia.com/doc/libraries/sdk/methods/search/wait-for-task
 await client.waitForTask({
   indexName,
   taskID,
 });
 
 // Search for "test"
+// https://www.algolia.com/doc/libraries/sdk/methods/search/search
 const { results } = await client.search({
   requests: [
     {
@@ -41,5 +43,7 @@ const { results } = await client.search({
   ],
 });
 
+
+// Check the reponse
 console.log(JSON.stringify(results));
 
