@@ -12,11 +12,11 @@ const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
 // https://www.algolia.com/doc/libraries/sdk/install#test-your-installation
 const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 
-// Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
+// Create an index name (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
 // https://www.algolia.com/doc/libraries/sdk/install#test-your-installation
-const indexName = ALGOLIA_INDEX_NAME;
+const indexName = ALGOLIA_INDEX_NAME || "new_index_name";
 
-// Add new objects to the index
+// Add new object to the index
 // https://www.algolia.com/doc/libraries/sdk/methods/search/save-object
 const newObject = { objectID: 1, name: "Foo" };
 

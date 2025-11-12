@@ -4,11 +4,9 @@ This script will export an index, including records, settings, rules and synonym
 It can be used in conjunction with restore.js to backup and restore an index to an application.
 */
 
-// Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
-const algoliasearch = require("algoliasearch");
-const dotenv = require("dotenv");
-
-dotenv.config();
+// Install the API client: https://www.algolia.com/doc/libraries/sdk/install#javascript
+import { algoliasearch } from "algoliasearch";
+import 'dotenv/config'
 
 // Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
 // and choose a name for your index. Add these environment variables to a `.env` file:
@@ -17,15 +15,12 @@ const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY;
 const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
 
 // Start the API client
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
+// https://www.algolia.com/doc/libraries/sdk/install#test-your-installation
 const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 
-// Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-const index = client.initIndex(ALGOLIA_INDEX_NAME);
-
-// Requiring fs module in which writeFile function is defined.
-const fs = require("fs");
+// Create an index name (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
+// https://www.algolia.com/doc/libraries/sdk/install#test-your-installation
+const indexName = ALGOLIA_INDEX_NAME || "new_index_name";
 
 let records = [],
   settings = [],
@@ -36,7 +31,8 @@ let records = [],
   // retrieve all records from index
   console.log(`Retrieving records...`);
   try {
-    await index.browseObjects({
+    await client.browseObjects({
+      indexName,
       batch: (batch) => {
         records = records.concat(batch);
       }
@@ -81,13 +77,14 @@ let records = [],
   //   write json files to current directory
   function createJson(data, name) {
     if (data) {
-      fs.writeFile(
-        `${ALGOLIA_INDEX_NAME}_${name}.json`,
-        JSON.stringify(data),
-        (err) => {
-          if (err) throw err;
-        }
-      );
+      // fs.writeFile(
+      //   `${ALGOLIA_INDEX_NAME}_${name}.json`,
+      //   JSON.stringify(data),
+      //   (err) => {
+      //     if (err) throw err;
+      //   }
+      // );
+      console.log({data}) // REMOVE LATER
     } else
       (error) => {
         console.log(`Error writing files: ${error.message}`);
