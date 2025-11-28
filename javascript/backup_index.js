@@ -29,26 +29,24 @@ let records = [],
   synonyms = [];
 
 (async () => {
-  // retrieve all records from index
-  console.log(`Retrieving records...`);
   try {
+    console.log(`Retrieving records...`);
+    
+    // retrieve all records from index
+    // https://www.algolia.com/doc/libraries/sdk/methods/search/browse-objects#javascript
     await client.browseObjects({
       indexName,
       aggregator: (res) => {
         records.push(...res.hits);
       },
-      browseParams: {
-        query: "",
-      },
     });
-
-    // records.forEach((record) => console.log(`- Record: ${record.objectID}`));
 
     console.log(`${records.length} record(s) retrieved`);
 
     console.log(`Retrieving settings...`);
 
     // retrieve all index settings
+    // https://www.algolia.com/doc/libraries/sdk/methods/search/get-settings
     settings = await client.getSettings({ indexName: indexName }).then();
 
     console.log(`settings retrieved`);
@@ -56,6 +54,7 @@ let records = [],
     console.log(`Retrieving rules...`);
 
     // retrieve all rules for index
+    // https://www.algolia.com/doc/libraries/sdk/methods/search/browse-rules
     await client.browseRules({
       indexName,
       aggregator: (res) => {
@@ -63,13 +62,12 @@ let records = [],
       },
     });
 
-    // rules.forEach((rule) => console.log(`- Rule: ${rule.objectID}`))
-
     console.log(`${rules.length} rules retrieved`);
 
     console.log(`Retrieving synonyms...`);
 
     // retrieve all synonyms for index
+    // https://www.algolia.com/doc/libraries/sdk/methods/search/browse-synonyms
     await client.browseSynonyms({
       indexName,
       aggregator: (res) => {
@@ -77,14 +75,12 @@ let records = [],
       },
     });
 
-    // synonyms.forEach((synonym) => console.log(`- Synonym: ${synonym.objectID}`))
-
     console.log(`${synonyms.length} synonyms retrieved`);
   } catch (error) {
     console.log(`Error retrieving data ${error.message}`);
   }
 
-  //   write json files to current directory
+  // write json files to current directory
   function createJson(data, name) {
     if (data) {
       fs.writeFile(
