@@ -6,7 +6,8 @@ It can be used in conjunction with restore.js to backup and restore an index to 
 
 // Install the API client: https://www.algolia.com/doc/libraries/sdk/install#javascript
 import { algoliasearch } from "algoliasearch";
-import 'dotenv/config'
+import "dotenv/config";
+import * as fs from "fs";
 
 // Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
 // and choose a name for your index. Add these environment variables to a `.env` file:
@@ -33,41 +34,50 @@ let records = [],
   try {
     await client.browseObjects({
       indexName,
-      batch: (batch) => {
-        records = records.concat(batch);
-      }
+      aggregator: (res) => {
+        records.push(...res.hits);
+      },
+      browseParams: {
+        query: "",
+      },
     });
 
-    console.log(`${records.length} records retrieved`);
+    // records.forEach((record) => console.log(`- Record: ${record.objectID}`));
+
+    console.log(`${records.length} record(s) retrieved`);
 
     console.log(`Retrieving settings...`);
 
     // retrieve all index settings
-    settings = await index.getSettings().then();
+    settings = await client.getSettings({ indexName: indexName }).then();
 
     console.log(`settings retrieved`);
 
     console.log(`Retrieving rules...`);
 
     // retrieve all rules for index
-    await index
-      .browseRules({
-        batch: (batch) => {
-          rules = rules.concat(batch);
-        }
-      });
+    await client.browseRules({
+      indexName,
+      aggregator: (res) => {
+        rules.push(...res.hits);
+      },
+    });
+
+    // rules.forEach((rule) => console.log(`- Rule: ${rule.objectID}`))
 
     console.log(`${rules.length} rules retrieved`);
 
     console.log(`Retrieving synonyms...`);
 
     // retrieve all synonyms for index
-    await index
-      .browseSynonyms({
-        batch: (batch) => {
-          synonyms = synonyms.concat(batch);
-        },
-      });
+    await client.browseSynonyms({
+      indexName,
+      aggregator: (res) => {
+        synonyms.push(...res.hits);
+      },
+    });
+
+    // synonyms.forEach((synonym) => console.log(`- Synonym: ${synonym.objectID}`))
 
     console.log(`${synonyms.length} synonyms retrieved`);
   } catch (error) {
@@ -77,19 +87,19 @@ let records = [],
   //   write json files to current directory
   function createJson(data, name) {
     if (data) {
-      // fs.writeFile(
-      //   `${ALGOLIA_INDEX_NAME}_${name}.json`,
-      //   JSON.stringify(data),
-      //   (err) => {
-      //     if (err) throw err;
-      //   }
-      // );
-      console.log({data}) // REMOVE LATER
+      fs.writeFile(
+        `${ALGOLIA_INDEX_NAME}_${name}.json`,
+        JSON.stringify(data),
+        (err) => {
+          if (err) throw err;
+        }
+      );
     } else
       (error) => {
         console.log(`Error writing files: ${error.message}`);
       };
   }
+
   try {
     let name = "records";
     createJson(records, name);
