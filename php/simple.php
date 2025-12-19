@@ -1,7 +1,9 @@
 <?php
 
 # Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/php/?client=php
-require __DIR__.'/vendor/autoload.php';
+require_once realpath(__DIR__ . "/vendor/autoload.php");
+
+use Algolia\AlgoliaSearch\Api\SearchClient;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
@@ -14,22 +16,34 @@ $ALGOLIA_INDEX_NAME = $_ENV['ALGOLIA_INDEX_NAME'];
 
 # Start the API client
 # https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-$client = \Algolia\AlgoliaSearch\SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
-
-# Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-$index = $client->initIndex($ALGOLIA_INDEX_NAME);
+$client = SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
 
 # Add new objects to the index
 # https://www.algolia.com/doc/api-reference/api-methods/add-objects/
-$newObject = ['objectID' => 1, 'name' => 'Foo'];
-$res = $index->saveObjects([$newObject]);
+// Add a new record to your Algolia index
+// Edit the JSON object based on your record schema
+$response = $client->saveObject(
+    $ALGOLIA_INDEX_NAME,
+    ['objectID' => '1',
+        'name' => 'foo',
+    ],
+);
 
-# Wait for the indexing task to complete
-# https://www.algolia.com/doc/api-reference/api-methods/wait-task/
-$res->wait();
+var_dump($response);
 
-# Search the index for "Fo"
-# https://www.algolia.com/doc/api-reference/api-methods/search/
-$objects = $index->search('Fo');
-print_r($objects);
+// Poll the task status to know when it has been indexed
+$client->waitForTask($ALGOLIA_INDEX_NAME, $response['taskID']);
+
+// Fetch search results, with typo tolerance
+$response = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => 'foo',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
+// play with the response
+var_dump($response);

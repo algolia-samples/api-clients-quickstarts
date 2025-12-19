@@ -8,7 +8,12 @@ This quickstart demonstrates various usages of the the [Algolia PHP API Client](
 
 - An Algolia account. If you don't have one already, [create an account for free](https://www.algolia.com/users/sign_up).
 - A PHP ^7.2 local environment, or [Docker](https://www.docker.com/get-started).
+- Install [Composer](https://getcomposer.org/).
+- Install the latest version of the Algolia PHP API Client by running this command:
 
+```bash
+php composer require algolia/algoliasearch-client-php
+```
 <details>
   <summary>Using VSCode</summary>
 
@@ -20,6 +25,10 @@ This quickstart demonstrates various usages of the the [Algolia PHP API Client](
 1. Create an Algolia Application and an [Algolia Index](https://www.algolia.com/doc/guides/getting-started/quick-start/tutorials/getting-started-with-the-dashboard/#indices)
 2. Copy the file [.env.example](.env.example) and rename it to `.env` 
 3. Set the environment variables `ALGOLIA_APP_ID`, `ALGOLIA_API_KEY` and `ALGOLIA_INDEX_NAME` in the `.env` file. You can obtain those from the [Algolia Dashboard](https://www.algolia.com/api-keys/). The `ALGOLIA_API_KEY` should be the "Admin API Key" (necessary for indexing).
+4. If you'd like to use the quickstart file `rest_api_return_top_hits.php`, please include the environment variable `URL_DOMAIN` in the `.env` file. The following URLs are available.
+
+**United States:** [https://analytics.us.algolia.com](https://analytics.us.algolia.com)
+**Europe (Germany):** [https://analytics.de.algolia.com](https://analytics.de.algolia.com)
 
 ## How to use
 

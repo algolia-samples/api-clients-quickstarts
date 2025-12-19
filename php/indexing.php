@@ -2,6 +2,8 @@
 
 require __DIR__.'/vendor/autoload.php';
 
+use Algolia\AlgoliaSearch\Api\SearchClient;
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -12,11 +14,7 @@ $ALGOLIA_INDEX_NAME = $_ENV['ALGOLIA_INDEX_NAME'];
 
 # Initialize the client
 # https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-$client = \Algolia\AlgoliaSearch\SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
-
-# Initialize an index
-# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-$index = $client->initIndex($ALGOLIA_INDEX_NAME);
+$client = SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
 
 # Define some objects to add to our index
 # https://www.algolia.com/doc/api-client/methods/indexing/#object-and-record
@@ -32,20 +30,40 @@ $contacts = [
     ];
 
 # We don't have any objects (yet) in our index
-$res = $index->search('');
+$res = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
 print('Current objects: ');
-print_r($res['hits']);
+print_r($res['results'][0]['hits']);
 print("\n");
 
 # Save Objects: Add mutliple new objects to an index.
 # https://www.algolia.com/doc/api-reference/api-methods/add-objects/?client=php
 print('Save Objects - Adding multiple objects: ');
 print_r($contacts);
-$index->saveObjects($contacts)->wait();
+$res = $client->saveObjects($ALGOLIA_INDEX_NAME, $contacts);
 
-$res = $index->search('');
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID']);
+
+$res = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
 print('Current objects: ');
-print_r($res['hits']);
+print_r($res['results'][0]['hits']);
 print("\n");
 
 # Save Objects: Replace an existing object with an updated set of attributes.
@@ -56,11 +74,22 @@ $new_contact = [
     'name' => 'FooBar',
     'objectID' => '1'
 ];
-$index->saveObject($new_contact)->wait();
+$res = $client->saveObject($ALGOLIA_INDEX_NAME, $new_contact);
 
-$res = $index->search('');
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID']);
+
+$res = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
 print('Current objects: ');
-print_r($res['hits']);
+print_r($res['results'][0]['hits']);
 print("\n");
 
 # Partial Update Objects: Update one or more attributes of an existing object.
@@ -68,25 +97,46 @@ print("\n");
 print('Save Objects - Updating object’s attributes on: ');
 print_r($contacts[0]);
 $new_contact = [
-    'email' => 'foo@bar.com', # New attribute
-    'objectID' => '1'
+    'email' => 'foo@bar.com' # New attribute
 ];
-$index->partialUpdateObject($new_contact)->wait();
+$res = $client->partialUpdateObject($ALGOLIA_INDEX_NAME, '1', $new_contact);
 
-$res = $index->search('');
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID']);
+
+$res = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
 print('Current objects: ');
-print_r($res['hits']);
+print_r($res['results'][0]['hits']);
 print("\n");
 
 # Delete Objects: Remove objects from an index using their objectID.
 # https://www.algolia.com/doc/api-reference/api-methods/delete-objects/?client=php
 $objectID_to_delete = $contacts[0]["objectID"];
 printf('Delete Objects - Deleting object with objectID "%s"', $objectID_to_delete);
-$index->deleteObject($objectID_to_delete)->wait();
+$res = $client->deleteObject($ALGOLIA_INDEX_NAME, $objectID_to_delete);
 
-$res = $index->search('');
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID']);
+
+$res = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
 print('Current objects: ');
-print_r($res['hits']);
+print_r($res['results'][0]['hits']);
 print("\n");
 
 # Replace All Objects: Clears all objects from your index and replaces them with a new set of objects.
@@ -103,11 +153,22 @@ $new_contacts = [
 ];
 print('Replace All Objects - Clears all objects and replaces them with: ');
 print_r($new_contacts);
-$index->replaceAllObjects($new_contacts)->wait();
+$res = $client->replaceAllObjects($ALGOLIA_INDEX_NAME, $new_contacts);
 
-$res = $index->search('');
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID']);
+
+$res = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
 print('Current objects: ');
-print_r($res['hits']);
+print_r($res['results'][0]['hits']);
 print("\n");
 
 # Delete By: Remove all objects matching a filter (including geo filters).
@@ -116,17 +177,32 @@ print_r('Delete By - Remove all objects matching "name:NewBar"');
 
 # Firstly, have an attribute to filter on
 # https://www.algolia.com/doc/api-client/methods/settings/?client=php
-$index->setSettings([
+$res = $client->setSettings($ALGOLIA_INDEX_NAME, 
+[
     'attributesForFaceting' => ['name']
-])->wait();
+]);
 
-$index->deleteBy([
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID']);
+
+$res = $client->deleteBy($ALGOLIA_INDEX_NAME,
+[
     'facetFilters' => ['name:NewBar'] # https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
-])->wait();
+]);
 
-$res = $index->search('');
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID']);
+
+$res = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
 print('Current objects: ');
-print_r($res['hits']);
+print_r($res['results'][0]['hits']);
 print("\n");
 
 # Get Objects: Get one or more objects using their objectIDs.
@@ -134,46 +210,61 @@ print("\n");
 $object_id = $new_contacts[0]['objectID'];
 printf('Get Objects - Getting object with objectID "%s"', $object_id);
 
-$res = $index->getObject($object_id);
+$res = $client->getObject($ALGOLIA_INDEX_NAME, $object_id);
 print('Results: ');
 print_r($res);
 print("\n");
 
 # Custom Batch: Perform several indexing operations in one API call.
 # https://www.algolia.com/doc/api-reference/api-methods/batch/?client=php
-$operations = [
-    [
-        'action' => 'addObject',
-        'indexName' => $ALGOLIA_INDEX_NAME,
-        'body' => [
-            'name' => 'BatchedBar',
-        ]
-    ],
-    [
-        'action' => 'updateObject',
-        'indexName' => $ALGOLIA_INDEX_NAME,
-        'body' => [
-            'objectID' => $object_id,
-            'name' => 'NewBatchedBar',
-        ]
-    ]
-];
 print('Custom Batch - Batching the operations: ');
-print_r( $operations);
-$res = $client->multipleBatch($operations)->wait();
 
-$res = $index->search('');
+$res = $client->multipleBatch(
+    ['requests' => [
+        ['action' => 'addObject',
+            'body' => [
+                'name' => 'BatchedBar',
+            ],
+            'indexName' => $ALGOLIA_INDEX_NAME,
+        ],
+    ],
+    ],
+);
+
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID'][$ALGOLIA_INDEX_NAME]);
+
+$res = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
 print('Current objects: ');
-print_r($res['hits']);
+print_r($res['results'][0]['hits']);
 print("\n");
 
 
 # Clear Objects: Clear the records of an index without affecting its settings.
 # https://www.algolia.com/doc/api-reference/api-methods/clear-objects/?client=php
 print_r("Clear Objects: Clear the records of an index without affecting its settings.\n");
-$index->clearObjects()->wait();
+$res = $client->clearObjects($ALGOLIA_INDEX_NAME);
+
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID']);
 
 # We don't have any objects in our index
-$res = $index->search('');
+$res = $client->search(
+    ['requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+    ],
+);
+
 print('Current objects: ');
-print_r($res['hits']);
+print_r($res['results'][0]['hits']);
