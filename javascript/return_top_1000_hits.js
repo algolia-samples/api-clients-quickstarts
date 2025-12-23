@@ -1,3 +1,4 @@
+// Install the API client: https://www.algolia.com/doc/libraries/sdk/install#javascript
 import { algoliasearch } from "algoliasearch";
 import "dotenv/config";
 import * as fs from "fs";
