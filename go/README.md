@@ -33,6 +33,13 @@ Install these dependencies using the go build command.
 ```bash
 go build
 ```
+
+If you plan to access the Analytics API, please run this command, too.
+
+```bash
+go get github.com/algolia/algoliasearch-client-go
+```
+
 Once setup, you can run each of the script in this folder using the Go command line.
 Example: to execute the `simple.go` script:
 
@@ -46,4 +53,9 @@ go run simple.go
 | ------------- | ------------- |
 | [simple.go](./simple.go)  | Index a single object and run a search query |
 | [indexing.go](./indexing.go)  | Showcase of the main indexing methods |
+| [change-index-settings.go](./change-index-settings.go)  | Change index settings |
+| [rules.go](./rules.go)  | Export rules and add a new rule to an index |
+| [backup.go](./backup.go)  | Backup an index |
+| [restore.go](./restore.go)  | Restore an index |
+| [rest_api_return_top_hits.go](./rest_api_return_top_hits.go)  | Get top 1000 searches with Analytics REST API |
 | [generate_key.go](./generate_key.go) | Generate a rate limted search API key |
