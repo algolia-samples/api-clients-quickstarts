@@ -8,7 +8,7 @@ ALGOLIA_APP_ID = ENV['ALGOLIA_APP_ID']
 ALGOLIA_API_KEY = ENV['ALGOLIA_API_KEY']
 ALGOLIA_INDEX_NAME = ENV['ALGOLIA_INDEX_NAME']
 
-# Start the API client & connect to it, when an index with the name `ALGOLIA_INDEX_NAME` already exists
+# Initialise the client and connect to it
 # https://www.algolia.com/doc/libraries/sdk/methods/search#ruby
 client = Algolia::SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 
