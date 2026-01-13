@@ -49,6 +49,7 @@ client.save_rule(ALGOLIA_INDEX_NAME, objectID, rule)
 response = client.save_rule(ALGOLIA_INDEX_NAME, objectID, rule, true)
 
 # Wait for asynchronous task to complete
+# https://www.algolia.com/doc/libraries/sdk/methods/search/wait-for-task
 client.wait_for_task(ALGOLIA_INDEX_NAME, response.task_id)
 
 # Browse rules
