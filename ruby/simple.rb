@@ -15,7 +15,7 @@ client = Algolia::SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 # Add new objects to the index
 # https://www.algolia.com/doc/libraries/sdk/methods/search/save-objects#ruby
 new_object = {objectID: 1, name: 'Foo'}
-res = client.save_objects(ALGOLIA_INDEX_NAME, [new_object], true) # waitForTasks: true - Wait for the indexing task to complete
+client.save_objects(ALGOLIA_INDEX_NAME, [new_object], true) # waitForTasks: true - Wait for the indexing task to complete
 
 # Search the index for "Fo"
 # https://www.algolia.com/doc/libraries/sdk/methods/search/search-single-index
