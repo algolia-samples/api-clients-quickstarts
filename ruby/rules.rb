@@ -1,4 +1,4 @@
-# Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/ruby/?client=ruby
+# Install the API client: https://www.algolia.com/doc/libraries/sdk/install#ruby
 require 'dotenv/load'
 require 'algolia'
 # require 'date'
@@ -9,23 +9,20 @@ ALGOLIA_APP_ID = ENV['ALGOLIA_APP_ID']
 ALGOLIA_API_KEY = ENV['ALGOLIA_API_KEY']
 ALGOLIA_INDEX_NAME = ENV['ALGOLIA_INDEX_NAME']
 
-# Start the API client
-# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-client = Algolia::Search::Client.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
+# Initialise the client and connect to it
+# https://www.algolia.com/doc/libraries/sdk/methods/search#ruby
+client = Algolia::SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 
-# Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-index = client.init_index(ALGOLIA_INDEX_NAME)
 
 # Exporting the rules 
-# https://www.algolia.com/doc/api-reference/api-methods/export-rules/#examples
+# https://www.algolia.com/doc/libraries/sdk/methods/search/browse-rules
 print "Original rules:\n"
-all_rules = index.browse_rules()
+all_rules = client.browse_rules(ALGOLIA_INDEX_NAME)
 all_rules.each { |rule| puts rule }
 print "\n"
 
 # Adding a new rule 
-# https://www.algolia.com/doc/api-reference/api-methods/save-rule/?client=php
+# https://www.algolia.com/doc/libraries/sdk/methods/search/save-rule
 rule_id = 'a-rule-id'
 print "Adding new rule: #{rule_id}\n"
 
@@ -56,18 +53,21 @@ rule = {
 # ]
 
 # Save the Rule.
-index.save_rule(rule)
+response = client.save_rule(ALGOLIA_INDEX_NAME, rule_id, rule)
 
+# Wait for task to complete
+# https://www.algolia.com/doc/libraries/sdk/methods/search/wait-for-task#ruby
+client.wait_for_task(ALGOLIA_INDEX_NAME, response.task_id)
 
 # Save the Rule, and forward it to all replicas of the index.
-# index.save_rule(rule, { forwardToReplicas: true })
+# client.save_rule(ALGOLIA_INDEX_NAME, rule, { forwardToReplicas: true })
 
 print "#{rule_id} added successfully\n"
 print "\n"
 
 # Exporting the modified rules 
-# https://www.algolia.com/doc/api-reference/api-methods/export-rules/
+# https://www.algolia.com/doc/libraries/sdk/methods/search/browse-rules
 print "Modified rules:\n"
-all_modified_rules = index.browse_rules()
+all_modified_rules = client.browse_rules(ALGOLIA_INDEX_NAME)
 all_modified_rules.each { |rule| puts rule }
 print "\n"
