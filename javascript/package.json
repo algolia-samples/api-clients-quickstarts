@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "author": "Algolia Samples",
   "license": "MIT",
+  "type": "module",
   "devDependencies": {
-    "algoliasearch": "^4.10.5",
+    "algoliasearch": "^5.42.0",
     "dotenv": "^10.0.0"
   }
 }

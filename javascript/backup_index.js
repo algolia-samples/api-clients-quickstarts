@@ -4,11 +4,10 @@ This script will export an index, including records, settings, rules and synonym
 It can be used in conjunction with restore.js to backup and restore an index to an application.
 */
 
-// Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript
-const algoliasearch = require("algoliasearch");
-const dotenv = require("dotenv");
-
-dotenv.config();
+// Install the API client: https://www.algolia.com/doc/libraries/sdk/install#javascript
+import { algoliasearch } from "algoliasearch";
+import "dotenv/config";
+import * as fs from "fs";
 
 // Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
 // and choose a name for your index. Add these environment variables to a `.env` file:
@@ -17,15 +16,12 @@ const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY;
 const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
 
 // Start the API client
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
+// https://www.algolia.com/doc/libraries/sdk/install#test-your-installation
 const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 
-// Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-const index = client.initIndex(ALGOLIA_INDEX_NAME);
-
-// Requiring fs module in which writeFile function is defined.
-const fs = require("fs");
+// Create an index name (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
+// https://www.algolia.com/doc/libraries/sdk/install#test-your-installation
+const indexName = ALGOLIA_INDEX_NAME || "new_index_name";
 
 let records = [],
   settings = [],
@@ -33,52 +29,58 @@ let records = [],
   synonyms = [];
 
 (async () => {
-  // retrieve all records from index
-  console.log(`Retrieving records...`);
   try {
-    await index.browseObjects({
-      batch: (batch) => {
-        records = records.concat(batch);
-      }
+    console.log(`Retrieving records...`);
+    
+    // retrieve all records from index
+    // https://www.algolia.com/doc/libraries/sdk/methods/search/browse-objects#javascript
+    await client.browseObjects({
+      indexName,
+      aggregator: (res) => {
+        records.push(...res.hits);
+      },
     });
 
-    console.log(`${records.length} records retrieved`);
+    console.log(`${records.length} record(s) retrieved`);
 
     console.log(`Retrieving settings...`);
 
     // retrieve all index settings
-    settings = await index.getSettings().then();
+    // https://www.algolia.com/doc/libraries/sdk/methods/search/get-settings
+    settings = await client.getSettings({ indexName: indexName }).then();
 
     console.log(`settings retrieved`);
 
     console.log(`Retrieving rules...`);
 
     // retrieve all rules for index
-    await index
-      .browseRules({
-        batch: (batch) => {
-          rules = rules.concat(batch);
-        }
-      });
+    // https://www.algolia.com/doc/libraries/sdk/methods/search/browse-rules
+    await client.browseRules({
+      indexName,
+      aggregator: (res) => {
+        rules.push(...res.hits);
+      },
+    });
 
     console.log(`${rules.length} rules retrieved`);
 
     console.log(`Retrieving synonyms...`);
 
     // retrieve all synonyms for index
-    await index
-      .browseSynonyms({
-        batch: (batch) => {
-          synonyms = synonyms.concat(batch);
-        },
-      });
+    // https://www.algolia.com/doc/libraries/sdk/methods/search/browse-synonyms
+    await client.browseSynonyms({
+      indexName,
+      aggregator: (res) => {
+        synonyms.push(...res.hits);
+      },
+    });
 
     console.log(`${synonyms.length} synonyms retrieved`);
   } catch (error) {
     console.log(`Error retrieving data ${error.message}`);
   }
 
-  //   write json files to current directory
+  // write json files to current directory
   function createJson(data, name) {
     if (data) {
       fs.writeFile(
@@ -93,6 +95,7 @@ let records = [],
         console.log(`Error writing files: ${error.message}`);
       };
   }
+
   try {
     let name = "records";
     createJson(records, name);
