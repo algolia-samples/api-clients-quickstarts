@@ -10,28 +10,28 @@ To learn how to get started with Algolia, you can take a look at our [getting st
 
 ### [Python](/python)
 
-This quickstart sample demonstrates usages of the [Algolia Python SDK](https://www.algolia.com/doc/api-client/getting-started/install/python/?client=python).
+This quickstart sample demonstrates usages of the [Algolia Python SDK](https://www.algolia.com/doc/libraries/sdk/install#python).
 
 ### [Go](/go)
 
-This quickstart sample demonstrates usages of the [Algolia Go SDK](https://www.algolia.com/doc/api-client/getting-started/install/go/?client=go).
+This quickstart sample demonstrates usages of the [Algolia Go SDK](https://www.algolia.com/doc/libraries/sdk/install#go).
 
 ### [PHP](/php)
 
-This quickstart sample demonstrates usages of the [Algolia PHP SDK](https://www.algolia.com/doc/api-client/getting-started/install/php/?client=php).
+This quickstart sample demonstrates usages of the [Algolia PHP SDK](https://www.algolia.com/doc/libraries/sdk/install#php).
 
 ### [JavaScript](/javascript)
 
-This quickstart sample demonstrates usages of the [Algolia Javascript SDK](https://www.algolia.com/doc/api-client/getting-started/install/javascript/?client=javascript).
+This quickstart sample demonstrates usages of the [Algolia Javascript SDK](https://www.algolia.com/doc/libraries/sdk/install#javascript).
 
 ### [.NET](/dotnet)
 
-This quickstart sample demonstrates usages of the [Algolia .NET SDK](https://www.algolia.com/doc/api-client/getting-started/install/csharp/?client=csharp).
+This quickstart sample demonstrates usages of the [Algolia .NET SDK](https://www.algolia.com/doc/libraries/sdk/install#csharp).
 
 ### [JAVA](/java)
 
-This quickstart sample demonstrates usages of the [Algolia Java SDK](https://www.algolia.com/doc/api-client/getting-started/install/java/?client=java).
+This quickstart sample demonstrates usages of the [Algolia Java SDK](https://www.algolia.com/doc/libraries/sdk/install#java).
 
 ### [RUBY](/ruby)
 
-This quickstart sample demonstrates usages of the [Algolia Ruby SDK](https://www.algolia.com/doc/api-client/getting-started/install/ruby/?client=ruby).
+This quickstart sample demonstrates usages of the [Algolia Ruby SDK](https://www.algolia.com/doc/libraries/sdk/install#ruby).
