@@ -1,19 +1,19 @@
-# Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/ruby/?client=ruby
+# Install the API client: https://www.algolia.com/doc/libraries/sdk/install#ruby
 require 'algolia'
 require 'dotenv/load'
-require 'json'
 
-# Algolia client credentials
+# Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
+# and choose a name for your index. Add these environment variables to a `.env` file:
 ALGOLIA_APP_ID = ENV['ALGOLIA_APP_ID']
 ALGOLIA_API_KEY = ENV['ALGOLIA_API_KEY']
 ALGOLIA_INDEX_NAME = ENV['ALGOLIA_INDEX_NAME']
 
-# Initialize the client and the index
-# https://www.algolia.com/doc/api-client/getting-started/initialize/ruby/?client=ruby#initialize-the-search-client
-client = Algolia::Search::Client.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
-index = client.init_index(ALGOLIA_INDEX_NAME)
+# Initialise the client and connect to it
+# https://www.algolia.com/doc/libraries/sdk/methods/search#ruby
+client = Algolia::SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 
 # Retrieve records
+# https://www.algolia.com/doc/libraries/sdk/methods/search/browse-objects#ruby
 puts 'Retrieving records...'
-records = index.browse({})['hits']
+records = client.browse_objects(ALGOLIA_INDEX_NAME, { query: "" })
 puts "#{records.length} records retrieved"

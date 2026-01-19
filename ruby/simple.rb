@@ -1,4 +1,4 @@
-# Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/ruby/?client=ruby
+# Install the API client: https://www.algolia.com/doc/libraries/sdk/install#ruby
 require 'dotenv/load'
 require 'algolia'
 
@@ -8,24 +8,16 @@ ALGOLIA_APP_ID = ENV['ALGOLIA_APP_ID']
 ALGOLIA_API_KEY = ENV['ALGOLIA_API_KEY']
 ALGOLIA_INDEX_NAME = ENV['ALGOLIA_INDEX_NAME']
 
-# Start the API client
-# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-client = Algolia::Search::Client.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
-
-# Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-index = client.init_index(ALGOLIA_INDEX_NAME)
+# Initialise the client and connect to it
+# https://www.algolia.com/doc/libraries/sdk/methods/search#ruby
+client = Algolia::SearchClient.create(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
 
 # Add new objects to the index
-# https://www.algolia.com/doc/api-reference/api-methods/add-objects/
+# https://www.algolia.com/doc/libraries/sdk/methods/search/save-objects#ruby
 new_object = {objectID: 1, name: 'Foo'}
-res = index.save_objects([new_object])
-
-# Wait for the indexing task to complete
-# https://www.algolia.com/doc/api-reference/api-methods/wait-task/
-res.wait()
+client.save_objects(ALGOLIA_INDEX_NAME, [new_object], true) # waitForTasks: true - Wait for the indexing task to complete
 
 # Search the index for "Fo"
-# https://www.algolia.com/doc/api-reference/api-methods/search/
-objects = index.search('Fo')
+# https://www.algolia.com/doc/libraries/sdk/methods/search/search-single-index
+objects = client.search_single_index(ALGOLIA_INDEX_NAME, {query: 'Fo'})
 puts objects
