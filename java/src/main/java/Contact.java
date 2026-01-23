@@ -33,6 +33,11 @@ public class Contact implements Serializable {
     return this;
   }
 
+  public Contact setObjectID(String objectID) {
+    this.objectID = objectID;
+    return this;
+  }
+
   public String getObjectID() {
     return objectID;
   }
