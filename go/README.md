@@ -57,5 +57,5 @@ go run simple.go
 | [rules.go](./rules.go)  | Export rules and add a new rule to an index |
 | [backup.go](./backup.go)  | Backup an index |
 | [restore.go](./restore.go)  | Restore an index |
-| [rest_api_return_top_hits.go](./rest_api_return_top_hits.go)  | Get top 1000 searches with Analytics REST API |
+| [return_top_hits.go](./rest_api_return_top_hits.go)  | Get top 1000 searches with Analytics REST API |
 | [generate_key.go](./generate_key.go) | Generate a rate limted search API key |
