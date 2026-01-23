@@ -34,5 +34,11 @@ dotnet run simple
 
 | File | Description |
 | ------------- | ------------- |
-| [simple](./Program.cs#37)  | Index a single object and run a search query |
-| [indexing](./Program.cs#68)  | Showcase of the main indexing methods |
+| [simple](./Program.cs#54)  | Index a single object and run a search query |
+| [indexing](./Program.cs#81)  | Showcase of the main indexing methods |
+| [change-index-settings](./Program.cs#259)  | Change index settings |
+| [rules](./Program.cs#291)  | 	Export rules and add a new rule to an index |
+| [backup](./Program.cs#340)  | Backup an index |
+| [restore](./Program.cs#439)  | Restore an index |
+| [return-top-hits](./Program.cs#522)  | Get top 1000 searches with Analytics REST API |
+| [generate-key](./Program.cs#553)  | Generate a rate-limited search only API key |
