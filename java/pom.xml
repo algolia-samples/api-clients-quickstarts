@@ -21,28 +21,23 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>com.algolia</groupId>
-            <artifactId>algoliasearch-core</artifactId>
-            <version>3.0.0</version>
-        </dependency>
 
-        <dependency>
+         <dependency>
             <groupId>com.algolia</groupId>
-            <artifactId>algoliasearch-apache</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.asynchttpclient</groupId>
-            <artifactId>async-http-client</artifactId>
-            <version>2.8.1</version>
+            <artifactId>algoliasearch</artifactId>
+            <version>4.34.2</version>
         </dependency>
 
         <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
-            <version>2.2.0</version>
+            <version>3.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.0</version>
         </dependency>
 
     </dependencies>

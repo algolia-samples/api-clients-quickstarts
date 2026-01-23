@@ -31,5 +31,11 @@ Once setup, you can run each of the script in this folder using your favorite Ja
 
 | File                         | Description                                  |
 | ---------------------------- | -------------------------------------------- |
-| [Simple.java](./src/main/java/Simple.java)     | Index a single object and run a search query |
-| [Indexing.java](./src/main/java/Indexing.java) | Showcase of the main indexing methods        |
+| [Simple.java](./src/main/java/Simple.java)                  | Index a single object and run a search query    |
+| [Indexing.java](./src/main/java/Indexing.java)              | Showcase of the main indexing methods           |
+| [Settings.java](./src/main/java/Settings.java)              | Change index settings                           |
+| [Rules.java](./src/main/java/Rules.java)                    | Export rules and add a new rule to an index     |
+| [Backup.java](./src/main/java/Backup.java)                  | Backup an index                                 |
+| [Restore.java](./src/main/java/Restore.java)                | Restore an index                                |
+| [ReturnTopHits.java](./src/main/java/ReturnTopHits.java)    | Get top 1000 searches with Analytics API Client |   
+| [GenerateKey.java](./src/main/java/GenerateKey.java)        | Generate API key                                |

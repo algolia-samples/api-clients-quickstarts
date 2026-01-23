@@ -1,19 +1,14 @@
-import com.algolia.search.*;
-import com.algolia.search.models.indexing.BatchIndexingResponse;
-import com.algolia.search.models.indexing.Query;
-import com.algolia.search.models.indexing.SearchResult;
-import com.algolia.search.models.settings.IndexSettings;
-import com.algolia.search.models.indexing.BatchOperation;
-import com.algolia.search.models.indexing.BatchRequest;
-import com.algolia.search.models.indexing.ActionEnum;
 
 import java.io.IOException;
-import java.lang.StackWalker.Option;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+
+import com.algolia.api.SearchClient;
+import com.algolia.model.search.*;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Indexing {
@@ -26,14 +21,13 @@ public class Indexing {
     
         Dotenv dotenv = Dotenv.configure().load();
 
-        // Start the API client
-        // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-        try (SearchClient searchClient =
-            DefaultSearchClient.create(dotenv.get("ALGOLIA_APP_ID"), dotenv.get("ALGOLIA_API_KEY"))) {
+        String appID = dotenv.get("ALGOLIA_APP_ID");
+        String apiKey = dotenv.get("ALGOLIA_API_KEY");
+        String indexName = dotenv.get("ALGOLIA_INDEX_NAME");
 
-            // Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-            // https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-            SearchIndex<Contact> index = searchClient.initIndex(dotenv.get("ALGOLIA_INDEX_NAME"), Contact.class);
+        // Start the API client
+        // https://www.algolia.com/doc/libraries/sdk/methods/search#java
+        try (SearchClient client = new SearchClient(appID, apiKey)) {
             
             // Define some objects to add to our index
             // https://www.algolia.com/doc/api-client/methods/indexing/#object-and-record
@@ -43,43 +37,57 @@ public class Indexing {
             );
 
             // We don't have any objects (yet) in our index
-            SearchResult<Contact> searchResults = index.search(new Query(""));
-            System.out.println("Current objects: " + searchResults.getHits());
+            CompletableFuture<SearchResponse<Hit>> searchResults = client.searchSingleIndexAsync(indexName, Hit.class);
+            System.out.println("Current objects: " + searchResults.get().getHits());
             
             // Save Objects: Add mutliple new objects to an index.
             // https://www.algolia.com/doc/api-reference/api-methods/add-objects/?client=java
             System.out.println("Save Objects - Adding multiple objects: " + contacts);
-            index.saveObjects(contacts, true).waitTask();
-            
-            searchResults = index.search(new Query(""));
-            System.out.println("Current objects: " + searchResults.getHits());
+
+            List<BatchResponse> saveObjects = client.saveObjects(indexName,contacts);
+
+            client.waitForTask(indexName, saveObjects.get(0).getTaskID());
+
+            searchResults = client.searchSingleIndexAsync(indexName, Hit.class);
+            System.out.println("Current objects: " + searchResults.get().getHits());
 
             // Save Objects: Replace an existing object with an updated set of attributes.
             // https://www.algolia.com/doc/api-reference/api-methods/save-objects/?client=java
             System.out.println("Save Objects - Replacing objects’s attributes on: " + contacts.get(0));
             Contact firstContact = contacts.get(0).setName("FooBar");
-            index.saveObject(firstContact).waitTask();
+            SaveObjectResponse saveObj = client.saveObject(indexName,firstContact);
 
-            searchResults = index.search(new Query(""));
-            System.out.println("Current objects: " + searchResults.getHits());
+            client.waitForTask(indexName, saveObj.getTaskID());
+
+            searchResults = client.searchSingleIndexAsync(indexName, Hit.class);
+            System.out.println("Current objects: " + searchResults.get().getHits());
 
             // Partial Update Objects: Update one or more attributes of an existing object.
             // https://www.algolia.com/doc/api-reference/api-methods/partial-update-objects/?client=java
             System.out.println("Save Objects - Updating object’s attributes on: " + contacts.get(0));
             firstContact.setEmail("test@test.com");
-            index.partialUpdateObject(firstContact).waitTask();
 
-            searchResults = index.search(new Query(""));
-            System.out.println("Current objects: " + searchResults.getHits());
+            UpdatedAtWithObjectIdResponse partialUpdateResp = client.partialUpdateObject(
+                indexName,
+                firstContact.getObjectID(),
+                firstContact
+            );
+
+            client.waitForTask(indexName, partialUpdateResp.getTaskID());
+
+            searchResults = client.searchSingleIndexAsync(indexName, Hit.class);
+            System.out.println("Current objects: " + searchResults.get().getHits());
 
             // Delete Objects: Remove objects from an index using their objectID.
             // https://www.algolia.com/doc/api-reference/api-methods/delete-objects/?client=java
             String objectIDToDelete = contacts.get(0).getObjectID();
             System.out.println("Delete Objects - Deleting object with objectID: " + objectIDToDelete);
-            index.deleteObject(objectIDToDelete).waitTask();
+            List<BatchResponse> deleteObjResp = client.deleteObjects(indexName, Arrays.asList(objectIDToDelete));
 
-            searchResults = index.search(new Query(""));
-            System.out.println("Current objects: " + searchResults.getHits());
+            client.waitForTask(indexName, deleteObjResp.get(0).getTaskID());
+
+            searchResults = client.searchSingleIndexAsync(indexName, Hit.class);
+            System.out.println("Current objects: " + searchResults.get().getHits());
 
             // Replace All Objects: Clears all objects from your index and replaces them with a new set of objects.
             // https://www.algolia.com/doc/api-reference/api-methods/replace-all-objects/?client=java
@@ -88,10 +96,17 @@ public class Indexing {
                 new Contact("4", "NewBar", Optional.empty())
             );
             System.out.println("Replace All Objects - Clears all objects and replaces them with: " + newContacts);
-            index.replaceAllObjects(newContacts, true);
+            ReplaceAllObjectsResponse replaceAllObjResp = client.replaceAllObjects(
+                indexName,
+                newContacts,
+                2,
+                Arrays.asList(ScopeType.SETTINGS, ScopeType.SYNONYMS)
+            );
 
-            searchResults = index.search(new Query(""));
-            System.out.println("Current objects: " + searchResults.getHits());
+            client.waitForTask(indexName, replaceAllObjResp.getBatchResponses().get(0).getTaskID());
+
+            searchResults = client.searchSingleIndexAsync(indexName, Hit.class);
+            System.out.println("Current objects: " + searchResults.get().getHits());
 
             // Delete By: Remove all objects matching a filter (including geo filters).
             // https://www.algolia.com/doc/api-reference/api-methods/delete-by/?client=java
@@ -101,41 +116,69 @@ public class Indexing {
             // https://www.algolia.com/doc/api-client/methods/settings/?client=java
             IndexSettings settings = new IndexSettings();
             settings.setAttributesForFaceting(Arrays.asList("name"));
-            index.setSettings(settings).waitTask();
+
+            UpdatedAtResponse response = client.setSettings(
+                indexName,
+                settings,
+                true
+            );
+
+            client.waitForTask(indexName, response.getTaskID());
 
             // Now delete the records matching "name=NewBar"
-            index.deleteBy(new Query("").setFacetFilters(Arrays.asList(Arrays.asList("name:NewBar"))));
+            response = client.deleteBy(indexName, new DeleteByParams().setFilters("name:NewBar"));
 
-            searchResults = index.search(new Query(""));
-            System.out.println("Current objects: " + searchResults.getHits());
+            client.waitForTask(indexName, response.getTaskID());
+
+            searchResults = client.searchSingleIndexAsync(indexName, Hit.class);
+            System.out.println("Current objects: " + searchResults.get().getHits());
 
             // Get Objects: Get one or more objects using their objectIDs.
             // https://www.algolia.com/doc/api-reference/api-methods/get-objects/?client=java
             String objectIDToRetrieve = newContacts.get(0).getObjectID();
             System.out.println("Get Objects - Getting object with objectID: " + objectIDToRetrieve);
 
-            Contact contact = index.getObject(objectIDToRetrieve);
-            System.out.println("Result: " + contact);
+            Object getObjResp = client.getObject(indexName, objectIDToRetrieve);
+            System.out.println("Result: " + getObjResp);
 
             // Custom Batch: Perform several indexing operations in one API call.
             // https://www.algolia.com/doc/api-reference/api-methods/batch/?client=java
-            List<BatchOperation<Contact>> operations = Arrays.asList(
-                new BatchOperation<>(dotenv.get("ALGOLIA_INDEX_NAME"), ActionEnum.ADD_OBJECT, new Contact("3", "BatchedBar", Optional.empty())),
-                new BatchOperation<>(dotenv.get("ALGOLIA_INDEX_NAME"), ActionEnum.UPDATE_OBJECT, new Contact("4", "BatchedFoo", Optional.empty()))
+            BatchWriteParams operations = new BatchWriteParams().setRequests(
+                    Arrays.asList(
+                    new BatchRequest()
+                        .setAction(Action.ADD_OBJECT)
+                        .setBody(
+                            new Contact("3", "BatchedBar", Optional.empty())
+                        ),
+                    new BatchRequest()
+                        .setAction(Action.ADD_OBJECT)
+                        .setBody(
+                            new Contact("4", "BatchedFoo", Optional.empty())
+                        )
+                    )
+                );
+
+            BatchResponse batchResp = client.batch(
+                indexName,
+                operations
             );
+
             System.out.println("Custom Batch");
-            searchClient.multipleBatch(operations).waitTask();
+            client.waitForTask(indexName, batchResp.getTaskID());
             
-            searchResults = index.search(new Query(""));
-            System.out.println("Current objects: " + searchResults.getHits());
+            searchResults = client.searchSingleIndexAsync(indexName, Hit.class);
+            System.out.println("Current objects: " + searchResults.get().getHits());
 
             // Clear Objects: Clear the records of an index without affecting its settings.
             // https://www.algolia.com/doc/api-reference/api-methods/clear-objects/?client=java
             System.out.println("Clear objects");
-            index.clearObjects().waitTask();
+            response = client.clearObjects(indexName);
 
-            searchResults = index.search(new Query(""));
-            System.out.println("Current objects: " + searchResults.getHits());
+            client.waitForTask(indexName, response.getTaskID());
+
+            searchResults = client.searchSingleIndexAsync(indexName, Hit.class);
+            System.out.println("Current objects: " + searchResults.get().getHits());
+        
         }
     }
 }
