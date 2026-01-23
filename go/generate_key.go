@@ -10,41 +10,35 @@ import (
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/algolia/algoliasearch-client-go/v3/algolia/search"
+	"github.com/algolia/algoliasearch-client-go/v4/algolia/search"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	var err error
-
-	err = godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("godotenv.Load: %v", err)
 	}
-	// Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
-	// and choose a name for your index. Add these environment variables to a `.env` file:
+
+	// Algolia client credentials
 	appID, apiKey, indexName := os.Getenv("ALGOLIA_APP_ID"), os.Getenv("ALGOLIA_API_KEY"), os.Getenv("ALGOLIA_INDEX_NAME")
 
 	// Start the API client
-	// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-	client := search.NewClient(appID, apiKey)
+	// https://www.algolia.com/doc/libraries/sdk/methods/search#go
+	client, err := search.NewClient(appID, apiKey)
+	if err != nil {
+		// The client can fail to initialize if you pass an invalid parameter.
+		fmt.Printf("Client error")
+		panic(err)
+	}
 
 	// Create the API key.
 	// https://www.algolia.com/doc/api-reference/api-methods/add-api-key/?client=go
 	fmt.Println("Generating key...")
-
-	keyParams := search.Key{
-		ACL:                    []string{"search"},
-		Description:            "Restricted search-only API key for algolia.com",
-		MaxQueriesPerIPPerHour: 100,
-	}
-
 	var key string
-	var keyRes search.CreateKeyRes
 
-	keyRes, err = client.AddAPIKey(keyParams)
-	err = keyRes.Wait()
+	keyRes, err := client.AddApiKey(client.NewApiAddApiKeyRequest(
+		search.NewEmptyApiKey().SetAcl(
+		[]search.Acl{search.Acl("search")}).SetDescription("Restricted search-only API key for algolia.com")))
 	if err != nil {
 		panic(errors.New("Error generating key."))
 	} else {
@@ -52,24 +46,36 @@ func main() {
 		fmt.Println("Key generated successfully:", key)
 	}
 
+	// Wait for API key
+	// https://www.algolia.com/doc/libraries/sdk/methods/search/wait-for-api-key
+	resWaitForKey, err := client.WaitForApiKey(
+		key, search.ApiKeyOperation("add"))
+	if err != nil {
+		// handle the eventual error
+		panic(err)
+	} else {
+		fmt.Println("Task is complete.")
+		fmt.Println(resWaitForKey)
+	}
+
 	// Test the new key
 	fmt.Println("Testing key...")
 
 	// Initialise a new client with the generated key
-	client = search.NewClient(appID, key)
-
-	// Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-	// https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-	index := client.InitIndex(indexName)
+	newClient, err := search.NewClient(appID, key)
+	if err != nil {
+		// The client can fail to initialize if you pass an invalid parameter.
+		fmt.Printf("Client error")
+		panic(err)
+	}
 
 	// Search the index with an empty string
 	// https://www.algolia.com/doc/api-reference/api-methods/search/
-	var indexRes search.QueryRes
-
-	indexRes, err = index.Search("")
+	indexRes, err := newClient.SearchSingleIndex(newClient.NewApiSearchSingleIndexRequest(indexName))
 	if err != nil {
 		panic(errors.New("Error testing key."))
+		fmt.Println(err)
 	} else {
-		fmt.Println("Key tested successfully.", indexRes.NbHits, "hits found.")
+		fmt.Println("Key tested successfully.", len(indexRes.Hits), "hits found.")
 	}
 }
