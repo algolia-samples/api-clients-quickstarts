@@ -519,7 +519,7 @@ namespace DotNetQuickStart
                 });
             });
 
-            app.Command("rest-api-return-top-hits", async configCmd =>
+            app.Command("return-top-hits", async configCmd =>
             {
                 configCmd.OnExecuteAsync(async success =>
                 {

@@ -40,5 +40,5 @@ dotnet run simple
 | [rules](./Program.cs#291)  | 	Export rules and add a new rule to an index |
 | [backup](./Program.cs#340)  | Backup an index |
 | [restore](./Program.cs#439)  | Restore an index |
-| [rest-api-return-top-hits](./Program.cs#522)  | Get top 1000 searches with Analytics REST API |
+| [return-top-hits](./Program.cs#522)  | Get top 1000 searches with Analytics REST API |
 | [generate-key](./Program.cs#553)  | Generate a rate-limited search only API key |
