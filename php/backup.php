@@ -3,6 +3,8 @@
 # Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/php/?client=php
 require __DIR__.'/vendor/autoload.php';
 
+use Algolia\AlgoliaSearch\Api\SearchClient;
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -13,18 +15,14 @@ $ALGOLIA_API_KEY = $_ENV['ALGOLIA_API_KEY'];
 $ALGOLIA_INDEX_NAME = $_ENV['ALGOLIA_INDEX_NAME'];
 
 # Start the API client
-# https://www.algolia.com/doc/api-client/getting-started/initialize/php/?client=php#initialize-the-search-client
-$client = \Algolia\AlgoliaSearch\SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
-
-# Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-# https://www.algolia.com/doc/api-client/getting-started/initialize/php/?client=php#initialize-the-search-client
-$index = $client->initIndex($ALGOLIA_INDEX_NAME);
+# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
+$client = SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
 
 # Get all records from an index
 # https://www.algolia.com/doc/api-reference/api-methods/browse/#get-all-records-from-an-index
 # Use an API key with `browse` ACL
 print("All the records:");
-$records = $index->browseObjects();
+$records = $client->browse($ALGOLIA_INDEX_NAME,);
 var_dump($records);
 print("\n");
 
@@ -43,7 +41,7 @@ else
 # Retrieve settings for an index
 # https://www.algolia.com/doc/api-reference/api-methods/get-settings/#retrieve-settings-for-an-index
 print("Index settings:\n");
-$settings = $index->getSettings();
+$settings = $client->getSettings($ALGOLIA_INDEX_NAME, 1);
 var_dump($settings);
 print("\n");
 
@@ -59,7 +57,7 @@ else
 # Export rules 
 # https://www.algolia.com/doc/api-reference/api-methods/export-rules/
 print("Rules:\n");
-$rules = $index->browseRules();
+$rules = $client->browseRules($ALGOLIA_INDEX_NAME);
 var_dump($rules);
 print("\n");
 
@@ -78,7 +76,7 @@ else
 # Export synonyms
 # https://www.algolia.com/doc/api-reference/api-methods/export-synonyms/
 print("Synonyms:\n");
-$synonyms = $index->browseSynonyms();
+$synonyms = $client->browseSynonyms($ALGOLIA_INDEX_NAME);
 var_dump($synonyms);
 print("\n");
 

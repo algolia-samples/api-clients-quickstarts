@@ -3,6 +3,8 @@
 # Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/php/?client=php
 require __DIR__.'/vendor/autoload.php';
 
+use Algolia\AlgoliaSearch\Api\SearchClient;
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -13,12 +15,8 @@ $ALGOLIA_API_KEY = $_ENV['ALGOLIA_API_KEY'];
 $ALGOLIA_INDEX_NAME = $_ENV['ALGOLIA_INDEX_NAME'];
 
 # Start the API client
-# https://www.algolia.com/doc/api-client/getting-started/initialize/php/?client=php#initialize-the-search-client
-$client = \Algolia\AlgoliaSearch\SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
-
-# Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-# https://www.algolia.com/doc/api-client/getting-started/initialize/php/?client=php#initialize-the-search-client
-$index = $client->initIndex($ALGOLIA_INDEX_NAME);
+# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
+$client = SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
 
 # Restoring all records with replace all objects method
 # https://www.algolia.com/doc/api-reference/api-methods/replace-all-objects/
@@ -29,11 +27,8 @@ print("All the records:");
 var_dump($jsonRecords);
 print("\n");
 
-# Decode json file
-$arrayRecords = json_decode($jsonRecords, true);
-
 # Restore Records
-$index->replaceAllObjects($arrayRecords);
+$client->replaceAllObjects($ALGOLIA_INDEX_NAME, $jsonRecords);
 print("Records restored\n");
 
 # Restoring settings with set settings method
@@ -49,7 +44,7 @@ print("\n");
 $settings = json_decode($jsonSettings, true);
 
 # Restore settings
-$index->setSettings($settings);
+$client->setSettings($ALGOLIA_INDEX_NAME, $settings);
 print("Settings restored\n");
 
 # Restoring Rules with replace all rules method
@@ -58,14 +53,14 @@ print("Settings restored\n");
 # Read json file
 $jsonRules = file_get_contents("{$ALGOLIA_INDEX_NAME}_rules.json");
 print("Rules:\n");
-var_dump($jsonRules);
+print_r($jsonRules);
 print("\n");
 
 # Decode json file
 $arrayRules = json_decode($jsonRules, true);
 
 # Restore Rules
-$index->replaceAllRules($arrayRules);
+$client->saveRules($ALGOLIA_INDEX_NAME, $arrayRules);
 print("Rules restored\n");
 
 
@@ -82,5 +77,5 @@ print("\n");
 $arraySynonyms = json_decode($jsonSynonyms, true);
 
 # Restore Synonyms
-$index->replaceAllSynonyms($arraySynonyms);
+$client->saveSynonyms($ALGOLIA_INDEX_NAME, $arraySynonyms);
 print("Synonyms restored\n");

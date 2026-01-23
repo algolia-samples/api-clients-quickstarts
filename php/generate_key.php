@@ -5,37 +5,44 @@
 #The generated key will be valid for Search operations, and will be limited to 100 queries per hour.
 
 # Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/php/?client=php
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
+
+use Algolia\AlgoliaSearch\Api\SearchClient;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-# Get your Algolia Application ID and (admin) API key from the dashboard: https://www.algolia.com/account/api-keys
-# and choose a name for your index. Add these environment variables to a `.env` file:
+# Algolia client credentials
 $ALGOLIA_APP_ID = $_ENV['ALGOLIA_APP_ID'];
 $ALGOLIA_API_KEY = $_ENV['ALGOLIA_API_KEY'];
 $ALGOLIA_INDEX_NAME = $_ENV['ALGOLIA_INDEX_NAME'];
 
-# Start the API client
+# Initialize the client
 # https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-$client = \Algolia\AlgoliaSearch\SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
+$client = SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
 
 # Set permissions for API key
 # https://www.algolia.com/doc/api-reference/api-methods/add-api-key/#method-param-acl
-$acl = ["search"];
 
-// Set the parameters for API key
-// https://www.algolia.com/doc/api-reference/api-methods/add-api-key/#method-param-maxqueriesperipperhour
+//Set the parameters for API key
+//https://www.algolia.com/doc/rest-api/search/add-api-key
 
-$params = [
-    'description'            => 'Restricted search-only API key for algolia.com',
-    // Rate-limit to 100 requests per hour per IP address
-    'maxQueriesPerIPPerHour' => 100
-];
+$acl = [
+    'acl' => [
+        'search',
+
+        'addObject',
+    ],
+        'description' => 'Restricted search-only API key for algolia.com',
+        'maxQueriesPerIPPerHour' => 100
+    ];
 
 # Create a new restricted search-only API key
 print("Creating new key...\n");
-$res = $client->addApiKey($acl, $params)->wait();
+
+$res = $client->addApiKey($acl);
+
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['key']);
 
 $new_key = $res['key'];
 
@@ -45,18 +52,30 @@ if ($new_key = $res['key']) {
     echo "Error while creating key\n";
 }
 
+//Wait for the API key to be created
+$res = $client->waitForApiKey(
+    $new_key,
+    'add',
+);
+
 # Test the created key
 print("Testing key...\n");
 
 # Initialise a new client with the generated key
-$client = \Algolia\AlgoliaSearch\SearchClient::create($ALGOLIA_APP_ID, $new_key);
-
-# Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-$index = $client->initIndex($ALGOLIA_INDEX_NAME);
+$newClient = SearchClient::create($ALGOLIA_APP_ID, $new_key);
 
 # Test the new generated key by performing a search
-if ($search_res = $index->search('')) {
+
+$searchQuery =  [
+    'requests' => [
+        ['indexName' => $ALGOLIA_INDEX_NAME,
+            'query' => '',
+            'hitsPerPage' => 50,
+        ],
+    ],
+];
+
+if ($search_res = $newClient->search($searchQuery)) {
     echo "Successful key test\n";
 } else {
     echo "Failed search with the new key\n";

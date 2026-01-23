@@ -3,6 +3,8 @@
 # Install the API client: https://www.algolia.com/doc/api-client/getting-started/install/php/?client=php
 require __DIR__.'/vendor/autoload.php';
 
+use Algolia\AlgoliaSearch\Api\SearchClient;
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
@@ -14,15 +16,12 @@ $ALGOLIA_INDEX_NAME = $_ENV['ALGOLIA_INDEX_NAME'];
 
 # Start the API client
 # https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/
-$client = \Algolia\AlgoliaSearch\SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
-
-# Create an index (or connect to it, if an index with the name `ALGOLIA_INDEX_NAME` already exists)
-# https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/#initialize-an-index
-$index = $client->initIndex($ALGOLIA_INDEX_NAME);
+$client = SearchClient::create($ALGOLIA_APP_ID, $ALGOLIA_API_KEY);
 
 # Set index settings
 # https://www.algolia.com/doc/api-reference/api-methods/set-settings/
-$index->setSettings(
+$res = $client->setSettings(
+    $ALGOLIA_INDEX_NAME, 
     [
       'searchableAttributes' => ['actors', 'genre'],
       'customRanking' => ['desc(rating)'],
@@ -31,12 +30,14 @@ $index->setSettings(
     [
       'forwardToReplicas' => true
     ]
-  )->wait();
+    );
+
+$client->waitForTask($ALGOLIA_INDEX_NAME, $res['taskID']);
 
 # Printing settings 
 # https://www.algolia.com/doc/api-reference/api-methods/get-settings/
 print("Index settings:\n");
-$settings = $index->getSettings();
+$settings = $client->getSettings($ALGOLIA_INDEX_NAME, 1);
 var_dump($settings);
 
 ?>
