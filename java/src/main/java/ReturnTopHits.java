@@ -10,10 +10,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class RestApiReturnTopHits {
+public class ReturnTopHits {
     
     public static void main(String[] args) throws ExecutionException, InterruptedException, IOException {
-        RestApiReturnTopHits.run();
+        ReturnTopHits.run();
     }
 
     public static void run() throws ExecutionException, InterruptedException, IOException {
